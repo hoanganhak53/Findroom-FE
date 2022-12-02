@@ -7,7 +7,6 @@ import Register from "./views/Register";
 import Home from "./views/Home";
 import Profile from "./views/Profile";
 import BoardUser from "./views/BoardUser";
-import BoardModerator from "./views/BoardModerator";
 import BoardAdmin from "./views/BoardAdmin";
 
 import { NavBar } from "./views/NavBar";
@@ -25,7 +24,6 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/user" element={<BoardUser />} />
-            <Route path="/mod" element={<BoardModerator />} />
             <Route path="/admin" element={<BoardAdmin />} />
           </Routes>
         </div>
