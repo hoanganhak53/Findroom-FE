@@ -1,38 +1,54 @@
-import axios from "axios";
+import { ROLES } from "../constants/roles"
+import { axiosInstance } from "./auth-header";
 
-const API_URL = "http://localhost:3000/";
+const API_URL = process.env.REACT_APP_API;
 
 const register = (username, email, password) => {
-    return axios.post(API_URL + "signup", {
+    return axiosInstance.post(API_URL + "sign-up", {
         username,
         email,
         password,
+        roles: [ROLES.user]
     });
 };
 
 const login = (username, password) => {
-    return axios
-    // .post(API_URL + "signin", { 
-        .get(API_URL + "auth", {
+    return axiosInstance
+        .post(API_URL + "authenticate", {
             username,
             password,
         })
         .then((response) => {
-            if (response.data.accessToken) {
-                localStorage.setItem("user", JSON.stringify(response.data));
+            console.log(response);
+            if (response.data.result) {
+                localStorage.setItem("token", JSON.stringify(response.data.result.token));
             }
-
             return response.data;
         });
 };
 
+const getUser = () => {
+    return axiosInstance
+        .get(API_URL + "user/me")
+        .then((response) => {
+            console.log(response);
+            if (response.data.result) {
+                localStorage.setItem("user", JSON.stringify(response.data.result));
+            }
+            return response.data;
+        });
+};
+
+
 const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
 };
 
 const authService = {
     register,
     login,
+    getUser,
     logout,
 };
 

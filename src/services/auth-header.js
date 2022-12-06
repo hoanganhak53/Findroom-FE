@@ -1,13 +1,20 @@
-export default function authHeader() {
-    const user = JSON.parse(localStorage.getItem("user"));
+import axios from "axios"
 
-    if (user && user.accessToken) {
-        // For Spring Boot back-end
-        // return { Authorization: "Bearer " + user.accessToken };
+export const axiosInstance = axios.create({
+    baseURL: process.env.REACT_APP_API,
+});
 
-        // for Node.js Express back-end
-        return { "x-access-token": user.accessToken };
-    } else {
-        return {};
+// Add a request interceptor
+axiosInstance.interceptors.request.use(
+    config => {
+        const token = JSON.parse(localStorage.getItem("token"))
+        console.log(token);
+        if (token) {
+            config.headers['Authorization'] = 'Bearer ' + token
+        }
+        return config
+    },
+    error => {
+        Promise.reject(error)
     }
-}
+)

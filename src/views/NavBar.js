@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import eventBus from '../common/EventBus';
 import { logout } from '../slices/auth';
 import Search from '../components/Search';
@@ -16,6 +16,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
+import { ROLES } from "../constants/roles";
 
 export const NavBar = () => {
     //role
@@ -23,7 +24,7 @@ export const NavBar = () => {
 
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     //menu
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -40,7 +41,7 @@ export const NavBar = () => {
 
     useEffect(() => {
         if (currentUser) {
-            setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
+            setShowAdminBoard(currentUser.roles.includes(ROLES.admin));
         } else {
             setShowAdminBoard(false);
         }
@@ -149,7 +150,7 @@ export const NavBar = () => {
                                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                             >
-                                <MenuItem>
+                                <MenuItem onClick={() => navigate('/profile')}>
                                     <Avatar /> Profile
                                 </MenuItem>
                                 <Divider />

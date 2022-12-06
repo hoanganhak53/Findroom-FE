@@ -8,26 +8,29 @@ import Home from "./views/Home";
 import Profile from "./views/Profile";
 import BoardUser from "./views/BoardUser";
 import BoardAdmin from "./views/BoardAdmin";
-
-import { NavBar } from "./views/NavBar";
+import NotFound from "./views/NotFound";
+import Layout from "./components/Layout";
+import { ROLES } from "./constants/roles";
+import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
   return (
     <Router>
-      <div>
-        <NavBar />
-        <div className="container mt-3">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/user" element={<BoardUser />} />
-            <Route path="/admin" element={<BoardAdmin />} />
-          </Routes>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="home" element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route element={<RequireAuth allowedRoles={[ROLES.user]} navigate="404" />}>
+            <Route path="profile" element={<Profile />} />
+            <Route path="user" element={<BoardUser />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={[ROLES.admin]} navigate="404" />}>
+            <Route path="admin" element={<BoardAdmin />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </Router>
   );
 };
