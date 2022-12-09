@@ -5,7 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { register } from "../slices/auth";
 import { clearMessage } from "../slices/message";
 import { Link } from "react-router-dom";
-import { registerSchema } from "../ultilities/schema";
+import { registerSchema } from "../utilities/schema";
 
 const Register = () => {
     const [successful, setSuccessful] = useState(false);

@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import eventBus from '../common/EventBus';
@@ -9,14 +9,10 @@ import EmailIcon from '@mui/icons-material/Email';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { ROLES } from "../constants/roles";
+import Dropdown from 'react-bootstrap/Dropdown';
+import PersonIcon from '@mui/icons-material/Person';
 
 export const NavBar = () => {
     //role
@@ -25,15 +21,6 @@ export const NavBar = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    //menu
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     const logOut = useCallback(() => {
         dispatch(logout());
@@ -57,7 +44,7 @@ export const NavBar = () => {
 
     return (
         <nav className="navbar navbar-expand navbar-dark bg-primary">
-            <Link to={"/"} className="navbar-brand d-flex align-items-center">
+            <Link to={"/home"} className="navbar-brand d-flex align-items-center">
                 <span>Findroom&nbsp;</span>
                 <OtherHousesIcon />
             </Link>
@@ -88,7 +75,6 @@ export const NavBar = () => {
             <div className="navbar-nav ml-auto">
                 <Search placeholder='Tìm kiếm phòng trên findroom' />
                 <li className="nav-item">
-
                     <Link to={"/"} className="nav-link d-flex align-items-center">
                         <EmailIcon />
                         <span>&nbsp;Nhắn tin</span>
@@ -102,66 +88,21 @@ export const NavBar = () => {
                 </li>
                 <li className="nav-item">
                     {currentUser ? (
-                        <Fragment>
-                            <Tooltip title="Account settings">
-                                <IconButton
-                                    onClick={handleClick}
-                                    size="small"
-                                    sx={{ ml: 2 }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                >
-                                    <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
-                                anchorEl={anchorEl}
-                                id="account-menu"
-                                open={open}
-                                onClose={handleClose}
-                                onClick={handleClose}
-                                PaperProps={{
-                                    elevation: 0,
-                                    sx: {
-                                        overflow: 'visible',
-                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                        mt: 1.5,
-                                        '& .MuiAvatar-root': {
-                                            width: 32,
-                                            height: 32,
-                                            ml: -0.5,
-                                            mr: 1,
-                                        },
-                                        '&:before': {
-                                            content: '""',
-                                            display: 'block',
-                                            position: 'absolute',
-                                            top: 0,
-                                            right: 14,
-                                            width: 10,
-                                            height: 10,
-                                            bgcolor: 'background.paper',
-                                            transform: 'translateY(-50%) rotate(45deg)',
-                                            zIndex: 0,
-                                        },
-                                    },
-                                }}
-                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                            >
-                                <MenuItem onClick={() => navigate('/profile')}>
-                                    <Avatar /> Profile
-                                </MenuItem>
-                                <Divider />
-                                <MenuItem onClick={logOut}>
-                                    <ListItemIcon>
-                                        <Logout fontSize="small" />
-                                    </ListItemIcon>
-                                    Logout
-                                </MenuItem>
-                            </Menu>
-                        </Fragment>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="primary" className='nav-link d-flex align-items-center'>
+                                <Avatar sx={{ width: 24, height: 24 }}>M</Avatar>
+                                <span>&nbsp;{currentUser.username}</span>
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item href="#/action-1" onClick={() => navigate('/profile')}>
+                                    <PersonIcon color='primary'/> Thông tin cá nhân
+                                </Dropdown.Item>
+                                <Dropdown.Item href="#/action-2" onClick={logout}>
+                                    <Logout color='warning'/> Đăng xuất
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     ) : (
                         <Link to={"/login"} className="nav-link">
                             <AccountCircleIcon />

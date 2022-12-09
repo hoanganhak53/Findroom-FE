@@ -1,3 +1,5 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
 label {
     display: block;
     margin-top: 10px;
@@ -30,4 +32,26 @@ label {
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
+}
+
+.t-img {
+    height: 128px;
+    width: 176px;
+}
+
+.m-card {
+    background-color: #fff;
+    padding: 20px 25px 20px;
+    margin: 0 auto 0px;
+    margin-top: 25px;
+    border-radius: 2px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.active-hover:hover {
+    filter: brightness(110%);
+}
+
+.active-box-shadow {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }

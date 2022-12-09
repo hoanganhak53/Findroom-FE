@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Login from "./views/Login";
@@ -12,13 +12,16 @@ import NotFound from "./views/NotFound";
 import Layout from "./components/Layout";
 import { ROLES } from "./constants/roles";
 import RequireAuth from "./components/RequireAuth";
+import { PostDetail } from "./views/post/PostDetail";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route path="" element={<Navigate to="home" replace />} />
           <Route path="home" element={<Home />} />
+          <Route path="room" element={<PostDetail />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route element={<RequireAuth allowedRoles={[ROLES.user]} navigate="404" />}>

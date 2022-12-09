@@ -8,6 +8,7 @@ import * as serviceWorker from "./serviceWorker";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
+document.body.style.backgroundColor = "#ECECEC";
 
 root.render(
     <Provider store={store}>

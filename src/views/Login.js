@@ -4,7 +4,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { login } from "../slices/auth";
 import { clearMessage } from "../slices/message";
-import { loginSchema } from "../ultilities/schema";
+import { loginSchema } from "../utilities/schema";
 
 const Login = () => {
     let navigate = useNavigate();
