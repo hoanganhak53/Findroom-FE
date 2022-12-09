@@ -6,7 +6,7 @@ import { PostInfor } from './PostInfor'
 
 export const PostDetail = () => {
   return (
-    <div className='mb-3'>
+    <div>
       <PostImg />
       <PostInfor />
       <PostFacility />

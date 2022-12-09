@@ -98,7 +98,7 @@ export const NavBar = () => {
                                 <Dropdown.Item href="#/action-1" onClick={() => navigate('/profile')}>
                                     <PersonIcon color='primary'/> Thông tin cá nhân
                                 </Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onClick={logout}>
+                                <Dropdown.Item href="#/action-2" onClick={logOut}>
                                     <Logout color='warning'/> Đăng xuất
                                 </Dropdown.Item>
                             </Dropdown.Menu>
