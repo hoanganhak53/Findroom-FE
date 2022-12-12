@@ -55,3 +55,102 @@ label {
 .active-box-shadow {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+
+.box__icon{
+    color: #3498DB;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.box__title{
+    display: flex;
+    font-size: 24px;
+}
+
+.input__name{
+    margin-bottom: 10px;
+}
+
+.input__input{
+    background-color: #EFEFEF;
+    border-radius: 10px;
+    outline: none;
+    border: 0;
+    padding: 4px 16px;
+    width: 80%;
+}
+
+.input__span{
+    margin-left: 12px;
+}
+
+.box__box{
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.display--block{
+    display: block;
+}
+
+.input__container{
+    display: flex;
+}
+
+.input__input--row{
+    width: 40% !important;
+}
+
+#box__radio{
+    color: #000;
+}
+
+.box__container{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 30px;
+}
+
+.box__button{
+    padding: 12px;
+    border-radius: 20px;
+    margin: 12px 0px;
+    display: flex;
+    align-items: center;
+    width: 20%;
+    background-color: #D9D9D9;
+    cursor: pointer;
+}
+
+.box__button.active{
+    background-color: #3498DB;
+    color: #fff;
+}
+
+.button__name{
+    margin-left: 8px;
+}
+
+.box__area{
+    margin: 40px 0;
+}
+
+#area{
+    padding: 30px;
+    border: 0;
+    background-color: #EFEFEF;
+    border-radius: 20px;
+    outline: 0;
+}
+
+.box__content{
+    margin: 40px 0;
+}
+
+.btn__btn{
+    margin: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
