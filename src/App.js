@@ -13,6 +13,7 @@ import Layout from "./components/Layout";
 import { ROLES } from "./constants/roles";
 import RequireAuth from "./components/RequireAuth";
 import { PostDetail } from "./views/post/PostDetail";
+import CreatePost from "./views/CreatePost";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="room" element={<PostDetail />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="create-post" element={<CreatePost />} />
           <Route element={<RequireAuth allowedRoles={[ROLES.user]} navigate="404" />}>
             <Route path="profile" element={<Profile />} />
             <Route path="user" element={<BoardUser />} />

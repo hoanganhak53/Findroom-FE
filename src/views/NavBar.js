@@ -81,7 +81,7 @@ export const NavBar = () => {
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link to={"/"} className="nav-link d-flex align-items-center">
+                    <Link to={"/create-post"} className="nav-link d-flex align-items-center">
                         <PostAddIcon />
                         <span>&nbsp;Đăng bài</span>
                     </Link>
