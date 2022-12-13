@@ -25,10 +25,10 @@ const App = () => {
           <Route path="room" element={<PostDetail />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="create-post" element={<CreatePost />} />
           <Route element={<RequireAuth allowedRoles={[ROLES.user]} navigate="404" />}>
             <Route path="profile" element={<Profile />} />
             <Route path="user" element={<BoardUser />} />
+            <Route path="create-post" element={<CreatePost />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={[ROLES.admin]} navigate="404" />}>
             <Route path="admin" element={<BoardAdmin />} />
