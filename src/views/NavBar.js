@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import eventBus from '../common/EventBus';
 import { logout } from '../slices/auth';
 import Search from '../components/Search';
@@ -20,7 +20,6 @@ export const NavBar = () => {
 
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const logOut = useCallback(() => {
         dispatch(logout());
@@ -95,10 +94,10 @@ export const NavBar = () => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1" onClick={() => navigate('/profile')}>
+                                <Dropdown.Item href="/profile">
                                     <PersonIcon color='primary'/> Thông tin cá nhân
                                 </Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onClick={logOut}>
+                                <Dropdown.Item href="/login" onClick={logOut}>
                                     <Logout color='warning'/> Đăng xuất
                                 </Dropdown.Item>
                             </Dropdown.Menu>

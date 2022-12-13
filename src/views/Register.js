@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
 import { register } from "../slices/auth";
@@ -10,7 +10,6 @@ import { registerSchema } from "../utilities/schema";
 const Register = () => {
     const [successful, setSuccessful] = useState(false);
 
-    const { message } = useSelector((state) => state.message);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -102,17 +101,6 @@ const Register = () => {
                     </Form>
                 </Formik>
             </div>
-
-            {message && (
-                <div className="form-group">
-                    <div
-                        className={successful ? "alert alert-success" : "alert alert-danger"}
-                        role="alert"
-                    >
-                        {message}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

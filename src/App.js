@@ -5,7 +5,7 @@ import "./App.css";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Home from "./views/Home";
-import Profile from "./views/Profile";
+import Profile from "./views/profile/Profile";
 import BoardUser from "./views/BoardUser";
 import BoardAdmin from "./views/BoardAdmin";
 import NotFound from "./views/NotFound";
@@ -14,6 +14,9 @@ import { ROLES } from "./constants/roles";
 import RequireAuth from "./components/RequireAuth";
 import { PostDetail } from "./views/post/PostDetail";
 import CreatePost from "./views/CreatePost";
+import { PersonalPost } from "./views/profile/PersonalPost";
+import { FavPost } from "./views/profile/FavPost";
+import { EditProfile } from "./views/profile/EditProfile";
 
 const App = () => {
   return (
@@ -26,7 +29,11 @@ const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route element={<RequireAuth allowedRoles={[ROLES.user]} navigate="404" />}>
-            <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={<Profile />}>
+              <Route path="" element={<PersonalPost />} />
+              <Route path="favorite" element={<FavPost />} />
+            </Route>
+            <Route path="edit-profile" element={<EditProfile />} />
             <Route path="user" element={<BoardUser />} />
             <Route path="create-post" element={<CreatePost />} />
           </Route>

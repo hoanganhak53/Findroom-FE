@@ -32,7 +32,6 @@ const Home = () => {
                     <h4 className="font-weight-bold">Phòng mới nhất</h4>
                     <button type="button" className="btn btn-outline-primary">Xem tất cả</button>
                 </div>
-
                 <br />
                 <PostList />
             </div>
