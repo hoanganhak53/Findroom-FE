@@ -8,6 +8,7 @@ const NotFound = () => (
       src={notfound}
       alt="not-found"
     />
+    <div>Hãy thử đăng nhập để sử dụng chức năng này</div>
     <Link to="/" className="link-home">
       Go Home
     </Link>

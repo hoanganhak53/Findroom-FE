@@ -4,7 +4,7 @@ export const RequireAuth = ({ allowedRoles, navigate }) => {
     const location = useLocation()
     const user = JSON.parse(localStorage.getItem("user"));
     
-    if(user.roles === null || user.roles === undefined)
+    if(!user?.roles)
         return <Navigate to={navigate} state={{ from: location }} replace />
 
     const content = (

@@ -21,9 +21,19 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import Button from '@mui/material/Button';
 
+
+const MIN_LENGTH = 4;
 const CreatePost = () => {
     const handleClickTI = (item) => {
         item.currentTarget.classList.toggle('active')
+    }
+
+    const uploadMultipleFiles = (e) => {
+        if (e?.target?.files?.length < MIN_LENGTH) {
+            e.preventDefault();
+            alert(`Cannot upload files less than ${MIN_LENGTH}`);
+            return;
+        }
     }
 
     return (
@@ -171,7 +181,8 @@ const CreatePost = () => {
                     Đăng ảnh phòng
                 </h3>
                 <p className='box__content'>Tối thiểu 4 ảnh dung lượng max 5MB/ảnh</p>
-                <input type="file" name="" id="up--image" multiple="multiple" />
+                <input type="file" name="" id="up--image" multiple="multiple" accept="image/*" 
+                onChange={(e) => uploadMultipleFiles(e)}/>
             </div>
             <div className="btn__btn">
                 <Button variant="contained" className='upload'>ĐĂNG PHÒNG NGAY</Button>
