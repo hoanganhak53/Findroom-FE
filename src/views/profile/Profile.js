@@ -22,7 +22,7 @@ const Profile = () => {
         <div className="container">
             <div className="m-card d-flex">
                 <Avatar sx={{ width: 72, height: 72 }}>M</Avatar>
-                <div className="col-6">
+                <div className="col-lg-6 col-md-4">
                     <h5 className="font-weight-bold">
                         {currentUser.full_name ? currentUser.full_name : currentUser.username}
                     </h5>

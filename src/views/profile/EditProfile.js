@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changePassword, editUserProfile } from '../../slices/auth';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
+import { showMessage } from '../../slices/message';
 
 export const EditProfile = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -42,6 +43,10 @@ export const EditProfile = () => {
             .unwrap()
             .then(() => {
                 setShow(false);
+                dispatch(showMessage({
+                    message: 'Đổi mật khẩu thành công',
+                    severity: 'success'
+                }));
             })
             .catch(() => {
                 setShow(false);
@@ -53,6 +58,10 @@ export const EditProfile = () => {
         dispatch(editUserProfile(body))
             .unwrap()
             .then(() => {
+                dispatch(showMessage({
+                    message: 'Thay đổi thông tin thành công',
+                    severity: 'success'
+                }));
                 navigate("/profile");
             })
             .catch(() => {
@@ -80,12 +89,12 @@ export const EditProfile = () => {
                             }}
                         >
                             <Avatar sx={{ width: 100, height: 100 }}>M</Avatar>
-                        </Badge>                        
+                        </Badge>
                     </div>
                     <div>
                         <button className="btn btn-outline-secondary mt-3" onClick={handleShow}>
                             Đổi mật khẩu
-                        </button>                        
+                        </button>
                     </div>
                 </div>
                 <div className='col-6'>
@@ -94,53 +103,58 @@ export const EditProfile = () => {
                         validationSchema={editProfileSchema}
                         onSubmit={handleEdit}
                     >
-                        <Form>
-                            <div className="form-group">
-                                <label htmlFor="username">Username</label>
-                                <Field name="username" type="text" className="form-control" />
-                                <ErrorMessage
-                                    name="username"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="email">Email</label>
-                                <Field name="email" type="text" className="form-control" />
-                                <ErrorMessage
-                                    name="email"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="full_name">Họ và tên</label>
-                                <Field name="full_name" type="text" className="form-control" />
-                                <ErrorMessage
-                                    name="full_name"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="phone_number">Số điện thoại</label>
-                                <Field name="phone_number" type="text" className="form-control" />
-                                <ErrorMessage
-                                    name="phone_number"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
+                        {({
+                            isValid,
+                            dirty,
+                        }) => (
+                            <Form>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    <Field name="username" type="text" className="form-control" />
+                                    <ErrorMessage
+                                        name="username"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="email">Email</label>
+                                    <Field name="email" type="text" className="form-control" />
+                                    <ErrorMessage
+                                        name="email"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="full_name">Họ và tên</label>
+                                    <Field name="full_name" type="text" className="form-control" />
+                                    <ErrorMessage
+                                        name="full_name"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="phone_number">Số điện thoại</label>
+                                    <Field name="phone_number" type="text" className="form-control" />
+                                    <ErrorMessage
+                                        name="phone_number"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
 
-                            <div className="form-group">
-                                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-                                    {loading && (
-                                        <span className="spinner-border spinner-border-sm"></span>
-                                    )}
-                                    <span>Đổi thông tin</span>
-                                </button>
-                            </div>
-                        </Form>
+                                <div className="form-group">
+                                    <button type="submit" className="btn btn-primary btn-block" disabled={!isValid || !dirty}>
+                                        {loading && (
+                                            <span className="spinner-border spinner-border-sm"></span>
+                                        )}
+                                        <span>Đổi thông tin</span>
+                                    </button>
+                                </div>
+                            </Form>
+                        )}
                     </Formik>
                 </div>
             </div>
@@ -154,43 +168,48 @@ export const EditProfile = () => {
                         validationSchema={passwordSchema}
                         onSubmit={handleChangePassword}
                     >
-                        <Form>
-                            <div className="form-group">
-                                <label htmlFor="current_password">Mật khẩu cũ</label>
-                                <Field name="current_password" type="password" className="form-control" />
-                                <ErrorMessage
-                                    name="current_password"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="new_password">Mật khẩu mới</label>
-                                <Field name="new_password" type="password" className="form-control" />
-                                <ErrorMessage
-                                    name="new_password"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="passwordConfirmation">Xác nhận mật khẩu</label>
-                                <Field name="passwordConfirmation" type="password" className="form-control" />
-                                <ErrorMessage
-                                    name="passwordConfirmation"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-                            <div className='d-flex justify-content-end align-items-center border-top pt-3'>
-                                <button className="btn btn-danger" onClick={handleClose}>
-                                    Hủy
-                                </button>
-                                <button type='submit' className="btn btn-primary ml-3">
-                                    Đổi mật khẩu
-                                </button>
-                            </div>
-                        </Form>
+                        {({
+                            isValid,
+                            dirty
+                        }) => (
+                            <Form>
+                                <div className="form-group">
+                                    <label htmlFor="current_password">Mật khẩu cũ</label>
+                                    <Field name="current_password" type="password" className="form-control" />
+                                    <ErrorMessage
+                                        name="current_password"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="new_password">Mật khẩu mới</label>
+                                    <Field name="new_password" type="password" className="form-control" />
+                                    <ErrorMessage
+                                        name="new_password"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="passwordConfirmation">Xác nhận mật khẩu</label>
+                                    <Field name="passwordConfirmation" type="password" className="form-control" />
+                                    <ErrorMessage
+                                        name="passwordConfirmation"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className='d-flex justify-content-end align-items-center border-top pt-3'>
+                                    <button type='button' className="btn btn-danger" onClick={handleClose}>
+                                        Hủy
+                                    </button>
+                                    <button type='submit' className="btn btn-primary ml-3" disabled={!isValid || !dirty}>
+                                        Đổi mật khẩu
+                                    </button>
+                                </div>
+                            </Form>
+                        )}
                     </Formik>
                 </Modal.Body>
             </Modal>

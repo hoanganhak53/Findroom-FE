@@ -17,11 +17,11 @@ const messageSlice = createSlice({
                 severity: state.severity
             };
         },
-        clearMessage: (state, action) => {
+        clearMessage: () => {
             return {
                 message: "",
                 isShow: false,
-                severity:state.severity
+                severity: "error"
             };
         },
         hiddenMessage: (state, action) => {
@@ -29,11 +29,16 @@ const messageSlice = createSlice({
         },
         setSeverity: (state, action) => {
             state.severity = action.payload;
+        },
+        showMessage: (state, action) => {
+            state.isShow = true;
+            state.message = action.payload.message;
+            state.severity = action.payload.severity;
         }
     },
 });
 
 const { reducer, actions } = messageSlice;
 
-export const { setMessage, clearMessage, hiddenMessage, setSeverity } = actions
+export const { setMessage, clearMessage, hiddenMessage, setSeverity, showMessage } = actions
 export default reducer;

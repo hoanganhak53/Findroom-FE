@@ -6,7 +6,6 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import Home from "./views/Home";
 import Profile from "./views/profile/Profile";
-import BoardUser from "./views/BoardUser";
 import BoardAdmin from "./views/BoardAdmin";
 import NotFound from "./views/NotFound";
 import Layout from "./components/Layout";
@@ -34,7 +33,6 @@ const App = () => {
               <Route path="favorite" element={<FavPost />} />
             </Route>
             <Route path="edit-profile" element={<EditProfile />} />
-            <Route path="user" element={<BoardUser />} />
             <Route path="create-post" element={<CreatePost />} />
           </Route>
           <Route element={<RequireAuth allowedRoles={[ROLES.admin]} navigate="404" />}>

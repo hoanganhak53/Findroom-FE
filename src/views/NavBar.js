@@ -48,24 +48,10 @@ export const NavBar = () => {
                 <OtherHousesIcon />
             </Link>
             <div className="navbar-nav mr-auto">
-                {/* <li className="nav-item">
-                    <Link to={"/home"} className="nav-link">
-                        Home
-                    </Link>
-                </li> */}
-
                 {showAdminBoard && (
                     <li className="nav-item">
                         <Link to={"/admin"} className="nav-link">
-                            Admin Board
-                        </Link>
-                    </li>
-                )}
-
-                {currentUser && (
-                    <li className="nav-item">
-                        <Link to={"/user"} className="nav-link">
-                            User
+                            Admin
                         </Link>
                     </li>
                 )}
