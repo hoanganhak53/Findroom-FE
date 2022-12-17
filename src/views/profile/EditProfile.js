@@ -1,5 +1,5 @@
-import { Avatar, Badge } from '@mui/material'
-import React, { useState } from 'react'
+import { Avatar, Badge } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { IconButton } from '@mui/material';
 import { editProfileSchema, passwordSchema } from '../../utilities/schema';
@@ -20,12 +20,48 @@ export const EditProfile = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const cloudinaryRef = useRef();
+    const widgetRef = useRef();
+
+    useEffect(() => {
+        cloudinaryRef.current = window.cloudinary;
+        widgetRef.current = cloudinaryRef.current.createUploadWidget(
+            {
+                cloudName: process.env.REACT_APP_CLOUD,
+                uploadPreset: process.env.REACT_APP_UPLOAD,
+                folder: 'findroom/avatar',
+                cropping: true,
+                multiple: false,
+                maxImageFileSize: 5000000,
+                maxImageWidth: 2000,
+                clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif'],
+            },
+            (error, result) => {
+                if (!error && result && result.event === 'success') {
+                    dispatch(
+                        editUserProfile({
+                            avatar_url: result.info.secure_url,
+                        })
+                    )
+                        .unwrap()
+                        .then(() => {
+                            dispatch(
+                                showMessage({
+                                    message: 'Thay đổi ảnh đại diện thành công',
+                                    severity: 'success',
+                                })
+                            );
+                        });
+                }
+            }
+        );
+    }, [dispatch]);
+
     const initialValues = {
         username: currentUser.username,
         email: currentUser.email,
         full_name: currentUser?.full_name ? currentUser?.full_name : '',
         phone_number: currentUser.phone_number,
-        avatar_url: currentUser.avatar_url,
     };
 
     const initialPassValues = {
@@ -35,52 +71,62 @@ export const EditProfile = () => {
     };
 
     const handleChangePassword = ({ current_password, new_password }) => {
-        dispatch(changePassword({
-            current_password,
-            new_password,
-            id: currentUser.id
-        }))
+        dispatch(
+            changePassword({
+                current_password,
+                new_password,
+                id: currentUser.id,
+            })
+        )
             .unwrap()
             .then(() => {
                 setShow(false);
-                dispatch(showMessage({
-                    message: 'Đổi mật khẩu thành công',
-                    severity: 'success'
-                }));
+                dispatch(
+                    showMessage({
+                        message: 'Đổi mật khẩu thành công',
+                        severity: 'success',
+                    })
+                );
             })
             .catch(() => {
                 setShow(false);
             });
-    }
+    };
 
     const handleEdit = (body) => {
         setLoading(true);
         dispatch(editUserProfile(body))
             .unwrap()
             .then(() => {
-                dispatch(showMessage({
-                    message: 'Thay đổi thông tin thành công',
-                    severity: 'success'
-                }));
-                navigate("/profile");
+                dispatch(
+                    showMessage({
+                        message: 'Thay đổi thông tin thành công',
+                        severity: 'success',
+                    })
+                );
+                navigate('/profile');
             })
             .catch(() => {
                 setLoading(false);
             });
-    }
+    };
 
     return (
-        <div className='m-card'>
+        <div className="m-card">
             <h4 className="font-weight-bold">Thông tin cá nhân</h4>
             <hr />
-            <div className='d-flex'>
-                <div className='col-3 mt-3 d-flex flex-column align-items-center'>
+            <div className="d-flex">
+                <div className="col-3 mt-3 d-flex flex-column align-items-center">
                     <div>
-                        <Badge overlap="circular"
+                        <Badge
+                            overlap="circular"
                             badgeContent={
-                                <IconButton aria-label="upload picture" component="label">
-                                    <input hidden accept="image/*" type="file" />
-                                    <CameraAltIcon fontSize='small' />
+                                <IconButton
+                                    aria-label="upload picture"
+                                    component="label"
+                                    onClick={() => widgetRef.current.open()}
+                                >
+                                    <CameraAltIcon fontSize="small" />
                                 </IconButton>
                             }
                             anchorOrigin={{
@@ -88,29 +134,36 @@ export const EditProfile = () => {
                                 horizontal: 'right',
                             }}
                         >
-                            <Avatar sx={{ width: 100, height: 100 }}>M</Avatar>
+                            <Avatar
+                                sx={{ width: 100, height: 100 }}
+                                src={currentUser.avatar_url}
+                            ></Avatar>
                         </Badge>
                     </div>
                     <div>
-                        <button className="btn btn-outline-secondary mt-3" onClick={handleShow}>
+                        <button
+                            className="btn btn-outline-secondary mt-3"
+                            onClick={handleShow}
+                        >
                             Đổi mật khẩu
                         </button>
                     </div>
                 </div>
-                <div className='col-6'>
+                <div className="col-6">
                     <Formik
                         initialValues={initialValues}
                         validationSchema={editProfileSchema}
                         onSubmit={handleEdit}
                     >
-                        {({
-                            isValid,
-                            dirty,
-                        }) => (
+                        {({ isValid, dirty }) => (
                             <Form>
                                 <div className="form-group">
                                     <label htmlFor="username">Username</label>
-                                    <Field name="username" type="text" className="form-control" />
+                                    <Field
+                                        name="username"
+                                        type="text"
+                                        className="form-control"
+                                    />
                                     <ErrorMessage
                                         name="username"
                                         component="div"
@@ -119,7 +172,11 @@ export const EditProfile = () => {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="email">Email</label>
-                                    <Field name="email" type="text" className="form-control" />
+                                    <Field
+                                        name="email"
+                                        type="text"
+                                        className="form-control"
+                                    />
                                     <ErrorMessage
                                         name="email"
                                         component="div"
@@ -128,7 +185,11 @@ export const EditProfile = () => {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="full_name">Họ và tên</label>
-                                    <Field name="full_name" type="text" className="form-control" />
+                                    <Field
+                                        name="full_name"
+                                        type="text"
+                                        className="form-control"
+                                    />
                                     <ErrorMessage
                                         name="full_name"
                                         component="div"
@@ -136,8 +197,14 @@ export const EditProfile = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="phone_number">Số điện thoại</label>
-                                    <Field name="phone_number" type="text" className="form-control" />
+                                    <label htmlFor="phone_number">
+                                        Số điện thoại
+                                    </label>
+                                    <Field
+                                        name="phone_number"
+                                        type="text"
+                                        className="form-control"
+                                    />
                                     <ErrorMessage
                                         name="phone_number"
                                         component="div"
@@ -146,7 +213,11 @@ export const EditProfile = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block" disabled={!isValid || !dirty}>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary btn-block"
+                                        disabled={!isValid || !dirty}
+                                    >
                                         {loading && (
                                             <span className="spinner-border spinner-border-sm"></span>
                                         )}
@@ -168,14 +239,17 @@ export const EditProfile = () => {
                         validationSchema={passwordSchema}
                         onSubmit={handleChangePassword}
                     >
-                        {({
-                            isValid,
-                            dirty
-                        }) => (
+                        {({ isValid, dirty }) => (
                             <Form>
                                 <div className="form-group">
-                                    <label htmlFor="current_password">Mật khẩu cũ</label>
-                                    <Field name="current_password" type="password" className="form-control" />
+                                    <label htmlFor="current_password">
+                                        Mật khẩu cũ
+                                    </label>
+                                    <Field
+                                        name="current_password"
+                                        type="password"
+                                        className="form-control"
+                                    />
                                     <ErrorMessage
                                         name="current_password"
                                         component="div"
@@ -183,8 +257,14 @@ export const EditProfile = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="new_password">Mật khẩu mới</label>
-                                    <Field name="new_password" type="password" className="form-control" />
+                                    <label htmlFor="new_password">
+                                        Mật khẩu mới
+                                    </label>
+                                    <Field
+                                        name="new_password"
+                                        type="password"
+                                        className="form-control"
+                                    />
                                     <ErrorMessage
                                         name="new_password"
                                         component="div"
@@ -192,19 +272,33 @@ export const EditProfile = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="passwordConfirmation">Xác nhận mật khẩu</label>
-                                    <Field name="passwordConfirmation" type="password" className="form-control" />
+                                    <label htmlFor="passwordConfirmation">
+                                        Xác nhận mật khẩu
+                                    </label>
+                                    <Field
+                                        name="passwordConfirmation"
+                                        type="password"
+                                        className="form-control"
+                                    />
                                     <ErrorMessage
                                         name="passwordConfirmation"
                                         component="div"
                                         className="alert alert-danger"
                                     />
                                 </div>
-                                <div className='d-flex justify-content-end align-items-center border-top pt-3'>
-                                    <button type='button' className="btn btn-danger" onClick={handleClose}>
+                                <div className="d-flex justify-content-end align-items-center border-top pt-3">
+                                    <button
+                                        type="button"
+                                        className="btn btn-danger"
+                                        onClick={handleClose}
+                                    >
                                         Hủy
                                     </button>
-                                    <button type='submit' className="btn btn-primary ml-3" disabled={!isValid || !dirty}>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary ml-3"
+                                        disabled={!isValid || !dirty}
+                                    >
                                         Đổi mật khẩu
                                     </button>
                                 </div>
@@ -214,5 +308,5 @@ export const EditProfile = () => {
                 </Modal.Body>
             </Modal>
         </div>
-    )
-}
+    );
+};
