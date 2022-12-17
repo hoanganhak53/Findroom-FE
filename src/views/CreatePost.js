@@ -306,7 +306,7 @@ const CreatePost = () => {
                     {loading && (
                         <span className="spinner-border spinner-border-sm"></span>
                     )}
-                    <span>Đổi thông tin</span>
+                    <span>Đăng bài</span>
                 </button>
             </div>
         </div>
