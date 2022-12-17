@@ -20,15 +20,40 @@ import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
 import ErrorIcon from '@mui/icons-material/Error';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import ImageGallery from 'react-image-gallery';
+import { useDispatch } from 'react-redux';
+import { createPostSlice } from '../slices/post';
+import { showMessage } from '../slices/message';
+
 
 const MIN_IMG = 4;
 
 const CreatePost = () => {
+    const [body, setBody] = useState({})
     const [listImg, setListImg] = useState([]);
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+
+    const handleInputBody = (e)=>{
+        const attribute = e.target.dataset?.body
+        const value = e.target.value
+        if(attribute){
+            setBody(prev=> {
+                prev[attribute] = (value === '' || isNaN(value)) ? value : +value
+                return prev
+            })
+        }
+        console.log(body)
+    }
 
     const handleClickTI = (item) => {
         item.currentTarget.classList.toggle('active');
+        const attribute = item.currentTarget.dataset?.body
+        if(!attribute) return;
+        setBody(prev=> {
+            prev[attribute] = !prev[attribute]
+            return prev
+        })
+        console.log(body)
     };
 
     const cloudinaryRef = useRef();
@@ -60,6 +85,29 @@ const CreatePost = () => {
         );
     }, [setListImg]);
 
+    const handleSubmit = ()=>{
+        setBody(prev => {
+            prev.upload_room_images = listImg.map(item => item.original)
+            return prev
+        })
+        setLoading(true);
+        dispatch(createPostSlice(body))
+            .unwrap()
+            .then((e) => {
+                console.log("first", e)
+                dispatch(
+                    showMessage({
+                        message: 'Tạo bài đăng thành công!',
+                        severity: 'success',
+                    })
+                );
+                setLoading(false);
+            })
+            .catch(() => {
+                setLoading(false);
+            });
+    }
+
     return (
         <div className="container">
             <h2 className="font-weight-bold">Đăng bài</h2>
@@ -77,6 +125,8 @@ const CreatePost = () => {
                             type="text"
                             className="input__input"
                             placeholder="Tối đa 50 ký tự"
+                            data-body="room_name"
+                            onChange={handleInputBody}
                         />
                     </div>
                 </div>
@@ -88,6 +138,8 @@ const CreatePost = () => {
                                 type="text"
                                 className="input__input input__input--row"
                                 placeholder="3,500,000"
+                                data-body="room_price"
+                                onChange={handleInputBody}
                             />
                             <span className="input__span">VNĐ/người</span>
                         </div>
@@ -99,6 +151,8 @@ const CreatePost = () => {
                                 type="text"
                                 className="input__input input__input--row"
                                 placeholder="3,500,000"
+                                data-body="deposit"
+                                onChange={handleInputBody}
                             />
                             <span className="input__span">VNĐ/người</span>
                         </div>
@@ -110,6 +164,8 @@ const CreatePost = () => {
                                 type="text"
                                 className="input__input input__input--row"
                                 placeholder="25"
+                                data-body="room_area"
+                                onChange={handleInputBody}
                             />
                             <span className="input__span">m2</span>
                         </div>
@@ -120,6 +176,8 @@ const CreatePost = () => {
                             type="text"
                             className="input__input input__input--row"
                             placeholder="3 nam hoặc 2 nữ"
+                            // data-body="room_area"
+                            // onChange={handleInputBody}
                         />
                     </div>
                 </div>
@@ -130,6 +188,8 @@ const CreatePost = () => {
                             type="text"
                             className="input__input"
                             placeholder="173 Đường Phạm Hùng, Phường Trung Hoà, Quận Cầu Giấy, Hà Nội"
+                            data-body="exact_room_address"
+                            onChange={handleInputBody}
                         />
                     </div>
                 </div>
@@ -139,6 +199,7 @@ const CreatePost = () => {
                         row
                         aria-labelledby="radio__group"
                         name="radio__group"
+                        // onChange={(e)=>console.log(e)}
                     >
                         <FormControlLabel
                             value="1"
@@ -175,6 +236,8 @@ const CreatePost = () => {
                                 type="text"
                                 className="input__input input__input--row"
                                 placeholder="3,500"
+                                data-body="electric_price"
+                                onChange={handleInputBody}
                             />
                             <span className="input__span">VNĐ/số</span>
                         </div>
@@ -186,6 +249,8 @@ const CreatePost = () => {
                                 type="text"
                                 className="input__input input__input--row"
                                 placeholder="100,000"
+                                data-body="water_price"
+                                onChange={handleInputBody}
                             />
                             <span className="input__span">VNĐ/người</span>
                         </div>
@@ -204,7 +269,7 @@ const CreatePost = () => {
                         <AccessAlarmIcon />
                         <span className="button__name">Giờ giấc tự do</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='parking_situation'>
                         <TwoWheelerIcon />
                         <span className="button__name">Chỗ để xe</span>
                     </div>
@@ -212,31 +277,31 @@ const CreatePost = () => {
                         <WifiIcon />
                         <span className="button__name">Wifi</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='air_conditioner'>
                         <AspectRatioIcon />
                         <span className="button__name">Máy lạnh</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='share_home_as_landlord'>
                         <KeyIcon />
-                        <span className="button__name">Không chung chủ</span>
+                        <span className="button__name">Chung chủ</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='room_pets_allowed'>
                         <PetsIcon />
                         <span className="button__name">Thú cưng</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='room_kitchen'>
                         <RestaurantIcon />
                         <span className="button__name">Nhà bếp</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='room_bed'>
                         <AirlineSeatFlatIcon />
                         <span className="button__name">Giường ngủ</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='room_bathroom'>
                         <LocalDrinkIcon />
                         <span className="button__name">WC riêng</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI} data-body='room_tivi'>
                         <TvIcon />
                         <span className="button__name">TV</span>
                     </div>
@@ -259,6 +324,8 @@ const CreatePost = () => {
                         rows="10"
                         cols="120"
                         placeholder="Thêm ghi chú về phòng trọ"
+                        data-body="notes"
+                        onChange={handleInputBody}
                     ></textarea>
                 </div>
             </div>
@@ -302,7 +369,7 @@ const CreatePost = () => {
                 )}
             </div>
             <div className="d-flex mt-4 mb-4 justify-content-center">
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
                     {loading && (
                         <span className="spinner-border spinner-border-sm"></span>
                     )}
