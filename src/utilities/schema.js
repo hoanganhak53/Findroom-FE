@@ -111,3 +111,21 @@ export const passwordSchema = Yup.object({
         .oneOf([Yup.ref('new_password'), null], 'Xác nhận mật khẩu không đúng')
         .required('Đây là trường bắt buộc!')
 });
+
+export const createPostSchema = Yup.object({
+    room_name: Yup.string()
+        .test(
+            "len",
+            "Tên phòng phải dưới 256 ký tự",
+            (val) =>
+                val &&
+                val.toString().length < 256
+        )
+        .required('Tên phòng là trường bắt buộc!'),
+    room_price: Yup.number().typeError('Giá phòng phải là số!').required('Giá phòng là trường bắt buộc!'),
+    deposit: Yup.number().typeError('Đặt cọc phải là số!').required('Đặt cọc là trường bắt buộc!'),
+    room_area: Yup.number().typeError('Diện tích phải là số!').required('Diện tích là trường bắt buộc!'),
+    exact_room_address: Yup.string().required('Địa chỉ là trường bắt buộc!'),
+    electric_price: Yup.number().typeError('Tiền điện phải là số!').required('Tiền điện là trường bắt buộc!'),
+    water_price: Yup.number().typeError('Tiền nước phải là số!').required('Tiền nước là trường bắt buộc!'),
+});

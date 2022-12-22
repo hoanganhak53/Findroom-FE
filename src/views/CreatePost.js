@@ -23,7 +23,9 @@ import ImageGallery from 'react-image-gallery';
 import { useDispatch } from 'react-redux';
 import { createPostSlice } from '../slices/post';
 import { showMessage } from '../slices/message';
-
+import { Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { createPostSchema } from '../utilities/schema';
 
 const MIN_IMG = 4;
 
@@ -31,6 +33,9 @@ const CreatePost = () => {
     const [body, setBody] = useState({})
     const [listImg, setListImg] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [show, setShow] = useState(false);
+    const [contentValidate, setContentValidate] = useState('');
+    const handleClose = () => setShow(false);
     const dispatch = useDispatch();
 
     const handleInputBody = (e)=>{
@@ -85,11 +90,18 @@ const CreatePost = () => {
         );
     }, [setListImg]);
 
-    const handleSubmit = ()=>{
+    const handleSubmit = async ()=>{
         setBody(prev => {
-            prev.upload_room_images = listImg.map(item => item.original)
+            prev.upload_room_images = listImg
             return prev
         })
+        try {
+            await createPostSchema.validate(body)
+        } catch (error) {
+            setShow(true)
+            setContentValidate(error.message)
+            return false
+        }
         setLoading(true);
         dispatch(createPostSlice(body))
             .unwrap()
@@ -376,6 +388,17 @@ const CreatePost = () => {
                     <span>Đăng bài</span>
                 </button>
             </div>
+            <Modal show={show} onHide={handleClose} centered>
+                <Modal.Header>
+                    <Modal.Title>Biểu mẫu không hợp lệ</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {contentValidate}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>Close</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
