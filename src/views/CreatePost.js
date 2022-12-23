@@ -6,9 +6,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+// import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
-import WifiIcon from '@mui/icons-material/Wifi';
+// import WifiIcon from '@mui/icons-material/Wifi';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import KeyIcon from '@mui/icons-material/Key';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -26,11 +26,14 @@ import { showMessage } from '../slices/message';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { createPostSchema } from '../utilities/schema';
+import KitchenIcon from '@mui/icons-material/Kitchen';
+import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
+import SecurityIcon from '@mui/icons-material/Security';
 
 const MIN_IMG = 4;
 
 const CreatePost = () => {
-    const [body, setBody] = useState({})
+    const [body, setBody] = useState({});
     const [listImg, setListImg] = useState([]);
     const [loading, setLoading] = useState(false);
     const [show, setShow] = useState(false);
@@ -38,27 +41,27 @@ const CreatePost = () => {
     const handleClose = () => setShow(false);
     const dispatch = useDispatch();
 
-    const handleInputBody = (e)=>{
-        const attribute = e.target.dataset?.body
-        const value = e.target.value
-        if(attribute){
-            setBody(prev=> {
-                prev[attribute] = (value === '' || isNaN(value)) ? value : +value
-                return prev
-            })
+    const handleInputBody = (e) => {
+        const attribute = e.target.dataset?.body;
+        const value = e.target.value;
+        if (attribute) {
+            setBody((prev) => {
+                prev[attribute] = value === '' || isNaN(value) ? value : +value;
+                return prev;
+            });
         }
-        console.log(body)
-    }
+        console.log(body);
+    };
 
     const handleClickTI = (item) => {
         item.currentTarget.classList.toggle('active');
-        const attribute = item.currentTarget.dataset?.body
-        if(!attribute) return;
-        setBody(prev=> {
-            prev[attribute] = !prev[attribute]
-            return prev
-        })
-        console.log(body)
+        const attribute = item.currentTarget.dataset?.body;
+        if (!attribute) return;
+        setBody((prev) => {
+            prev[attribute] = !prev[attribute];
+            return prev;
+        });
+        console.log(body);
     };
 
     const cloudinaryRef = useRef();
@@ -90,23 +93,23 @@ const CreatePost = () => {
         );
     }, [setListImg]);
 
-    const handleSubmit = async ()=>{
-        setBody(prev => {
-            prev.upload_room_images = listImg
-            return prev
-        })
+    const handleSubmit = async () => {
+        setBody((prev) => {
+            prev.upload_room_images = listImg;
+            return prev;
+        });
         try {
-            await createPostSchema.validate(body)
+            await createPostSchema.validate(body);
         } catch (error) {
-            setShow(true)
-            setContentValidate(error.message)
-            return false
+            setShow(true);
+            setContentValidate(error.message);
+            return false;
         }
         setLoading(true);
         dispatch(createPostSlice(body))
             .unwrap()
             .then((e) => {
-                console.log("first", e)
+                console.log('first', e);
                 dispatch(
                     showMessage({
                         message: 'Tạo bài đăng thành công!',
@@ -118,7 +121,7 @@ const CreatePost = () => {
             .catch(() => {
                 setLoading(false);
             });
-    }
+    };
 
     return (
         <div className="container">
@@ -214,27 +217,27 @@ const CreatePost = () => {
                         // onChange={(e)=>console.log(e)}
                     >
                         <FormControlLabel
-                            value="1"
+                            value="Shared"
                             control={<Radio />}
-                            label="Tìm người ở ghép"
+                            label="Phòng ở ghép"
                         />
                         <FormControlLabel
-                            value="2"
+                            value="NotShared"
                             control={<Radio />}
-                            label="Tìm người ở thuê"
+                            label="Phòng cho thuê"
                         />
                         <FormControlLabel
-                            value="3"
+                            value="Apartment"
                             control={<Radio />}
                             label="Căn hộ"
                         />
                         <FormControlLabel
-                            value="4"
+                            value="Dormitory"
                             control={<Radio />}
                             label="Homestay"
                         />
                         <FormControlLabel
-                            value="5"
+                            value="House"
                             control={<Radio />}
                             label="Nhà nguyên căn"
                         />
@@ -264,7 +267,7 @@ const CreatePost = () => {
                                 data-body="water_price"
                                 onChange={handleInputBody}
                             />
-                            <span className="input__span">VNĐ/người</span>
+                            <span className="input__span">VNĐ/số</span>
                         </div>
                     </div>
                 </div>
@@ -277,49 +280,109 @@ const CreatePost = () => {
                     Tiện ích
                 </h3>
                 <div className="box__container">
-                    <div className="box__button" onClick={handleClickTI}>
+                    {/* <div className="box__button" onClick={handleClickTI}>
                         <AccessAlarmIcon />
                         <span className="button__name">Giờ giấc tự do</span>
-                    </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='parking_situation'>
+                    </div> */}
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="parking_situation"
+                    >
                         <TwoWheelerIcon />
                         <span className="button__name">Chỗ để xe</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    {/* <div className="box__button" onClick={handleClickTI}>
                         <WifiIcon />
                         <span className="button__name">Wifi</span>
-                    </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='air_conditioner'>
+                    </div> */}
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="air_conditioner"
+                    >
                         <AspectRatioIcon />
                         <span className="button__name">Máy lạnh</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='share_home_as_landlord'>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="share_home_as_landlord"
+                    >
                         <KeyIcon />
-                        <span className="button__name">Chung chủ</span>
+                        <span className="button__name">Không chung chủ</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='room_pets_allowed'>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_pets_allowed"
+                    >
                         <PetsIcon />
                         <span className="button__name">Thú cưng</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='room_kitchen'>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_kitchen"
+                    >
                         <RestaurantIcon />
                         <span className="button__name">Nhà bếp</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='room_bed'>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_bed"
+                    >
                         <AirlineSeatFlatIcon />
                         <span className="button__name">Giường ngủ</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='room_bathroom'>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_bathroom"
+                    >
                         <LocalDrinkIcon />
                         <span className="button__name">WC riêng</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI} data-body='room_tivi'>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_tivi"
+                    >
                         <TvIcon />
                         <span className="button__name">TV</span>
                     </div>
-                    <div className="box__button" onClick={handleClickTI}>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_closet"
+                    >
                         <CalendarViewMonthIcon />
                         <span className="button__name">Tủ đồ</span>
+                    </div>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_refrigerator"
+                    >
+                        <KitchenIcon />
+                        <span className="button__name">Tủ lạnh</span>
+                    </div>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="room_washing_machine"
+                    >
+                        <LocalLaundryServiceIcon />
+                        <span className="button__name">Máy giặt</span>
+                    </div>
+                    <div
+                        className="box__button"
+                        onClick={handleClickTI}
+                        data-body="security_guard"
+                    >
+                        <SecurityIcon />
+                        <span className="button__name">Bảo vệ</span>
                     </div>
                 </div>
             </div>
@@ -381,7 +444,11 @@ const CreatePost = () => {
                 )}
             </div>
             <div className="d-flex mt-4 mb-4 justify-content-center">
-                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={handleSubmit}
+                >
                     {loading && (
                         <span className="spinner-border spinner-border-sm"></span>
                     )}
@@ -392,11 +459,11 @@ const CreatePost = () => {
                 <Modal.Header>
                     <Modal.Title>Biểu mẫu không hợp lệ</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    {contentValidate}
-                </Modal.Body>
+                <Modal.Body>{contentValidate}</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Close</Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>
