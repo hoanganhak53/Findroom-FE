@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 
-import { register } from "../slices/auth";
-import { clearMessage } from "../slices/message";
-import { Link } from "react-router-dom";
-import { registerSchema } from "../utilities/schema";
+import { register } from '../slices/auth';
+import { clearMessage, showMessage } from '../slices/message';
+import { Link } from 'react-router-dom';
+import { registerSchema } from '../utilities/schema';
 
 const Register = () => {
-    const [successful, setSuccessful] = useState(false);
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -17,23 +15,26 @@ const Register = () => {
     }, [dispatch]);
 
     const initialValues = {
-        username: "",
-        email: "",
-        password: "",
+        username: '',
+        email: '',
+        password: '',
     };
 
     const handleRegister = (formValue) => {
         const { username, email, password } = formValue;
 
-        setSuccessful(false);
-
         dispatch(register({ username, email, password }))
             .unwrap()
             .then(() => {
-                setSuccessful(true);
+                dispatch(
+                    showMessage({
+                        message: 'Tạo tài khoản thành công',
+                        severity: 'success',
+                    })
+                );
             })
-            .catch(() => {
-                setSuccessful(false);
+            .catch((error) => {
+                console.error(error);
             });
     };
 
@@ -51,53 +52,62 @@ const Register = () => {
                     onSubmit={handleRegister}
                 >
                     <Form>
-                        {!successful && (
-                            <div>
-                                <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <Field name="username" type="text" className="form-control" />
-                                    <ErrorMessage
-                                        name="username"
-                                        component="div"
-                                        className="alert alert-danger"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="email">Email</label>
-                                    <Field name="email" type="email" className="form-control" />
-                                    <ErrorMessage
-                                        name="email"
-                                        component="div"
-                                        className="alert alert-danger"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="password">Password</label>
-                                    <Field
-                                        name="password"
-                                        type="password"
-                                        className="form-control"
-                                    />
-                                    <ErrorMessage
-                                        name="password"
-                                        component="div"
-                                        className="alert alert-danger"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
-                                </div>
-                                <div className="form-group d-flex align-items-center justify-content-center">
-                                    <span>Bạn đã có tài khoản?&nbsp;</span>
-                                    <Link to={"/login"}>
-                                        Đăng nhập ngay
-                                    </Link>
-                                </div>
+                        <div>
+                            <div className="form-group">
+                                <label htmlFor="username">Username</label>
+                                <Field
+                                    name="username"
+                                    type="text"
+                                    className="form-control"
+                                />
+                                <ErrorMessage
+                                    name="username"
+                                    component="div"
+                                    className="alert alert-danger"
+                                />
                             </div>
-                        )}
+
+                            <div className="form-group">
+                                <label htmlFor="email">Email</label>
+                                <Field
+                                    name="email"
+                                    type="email"
+                                    className="form-control"
+                                />
+                                <ErrorMessage
+                                    name="email"
+                                    component="div"
+                                    className="alert alert-danger"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="password">Password</label>
+                                <Field
+                                    name="password"
+                                    type="password"
+                                    className="form-control"
+                                />
+                                <ErrorMessage
+                                    name="password"
+                                    component="div"
+                                    className="alert alert-danger"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary btn-block"
+                                >
+                                    Sign Up
+                                </button>
+                            </div>
+                            <div className="form-group d-flex align-items-center justify-content-center">
+                                <span>Bạn đã có tài khoản?&nbsp;</span>
+                                <Link to={'/login'}>Đăng nhập ngay</Link>
+                            </div>
+                        </div>
                     </Form>
                 </Formik>
             </div>

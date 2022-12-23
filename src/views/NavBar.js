@@ -91,9 +91,13 @@ export const NavBar = () => {
                                     sx={{ width: 24, height: 24 }}
                                     src={currentUser.avatar_url}
                                 ></Avatar>
-                                <span>&nbsp;{currentUser.username}</span>
+                                <span>
+                                    &nbsp;
+                                    {currentUser.full_name
+                                        ? currentUser.full_name
+                                        : currentUser.username}
+                                </span>
                             </Dropdown.Toggle>
-
                             <Dropdown.Menu>
                                 <Dropdown.Item href="/profile">
                                     <PersonIcon color="primary" /> Thông tin cá
