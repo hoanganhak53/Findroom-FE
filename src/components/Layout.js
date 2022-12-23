@@ -1,11 +1,11 @@
-import { Snackbar } from '@mui/material'
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import { Footer } from '../views/Footer'
-import { NavBar } from '../views/NavBar'
+import { Snackbar } from '@mui/material';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { Footer } from '../views/Footer';
+import { NavBar } from '../views/NavBar';
 import MuiAlert from '@mui/material/Alert';
-import { useSelector, useDispatch } from 'react-redux'
-import { hiddenMessage } from '../slices/message'
+import { useSelector, useDispatch } from 'react-redux';
+import { hiddenMessage } from '../slices/message';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -30,12 +30,16 @@ const Layout = () => {
                 <Outlet />
             </div>
             <Footer />
-            <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+            <Snackbar open={open} autoHideDuration={3500} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity={severity}
+                    sx={{ width: '100%' }}
+                >
                     {message}
                 </Alert>
             </Snackbar>
         </React.Fragment>
-    )
-}
-export default Layout
+    );
+};
+export default Layout;

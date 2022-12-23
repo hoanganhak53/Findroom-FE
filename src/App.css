@@ -1,8 +1,7 @@
 @import "~react-image-gallery/styles/css/image-gallery.css";
 
 label {
-    display: block;
-    margin-top: 10px;
+    margin-bottom: 0px;
 }
 
 .login-form,

@@ -81,7 +81,7 @@ export const PostInfor = ({ room }) => {
                 </div>
                 <p className="pt-2">
                     <span className="font-weight-bold">Ngày đăng: </span>
-                    {convertTime(room.updated_date)}
+                    {convertTime(room.created_date)}
                 </p>
             </div>
         </div>

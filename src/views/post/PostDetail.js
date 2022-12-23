@@ -36,6 +36,8 @@ export const PostDetail = () => {
                     <PostImg
                         images={room?.upload_room_images}
                         name={room?.room_name}
+                        room_id={room?._id}
+                        is_fav={room?.is_fav}
                     />
                     <PostInfor room={room} />
                     <PostFacility room={room} />

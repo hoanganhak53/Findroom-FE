@@ -19,7 +19,7 @@ export const PostList = ({ posts }) => {
                     <Fragment key={e._id}>
                         <div className="d-flex">
                             <img
-                                src={e.upload_room_images[0].original}
+                                src={e?.upload_room_images[0]?.original}
                                 className="figure-img img-fluid rounded active-box-shadow active-hover"
                                 style={{ width: '216px', height: '152px' }}
                                 alt="trend-img"
@@ -27,33 +27,33 @@ export const PostList = ({ posts }) => {
                             />
                             <div className="d-flex flex-column justify-content-between pl-3 pb-2">
                                 <h5 onClick={() => navigate('/room')}>
-                                    {e.room_name}
+                                    {e?.room_name}
                                 </h5>
                                 <div className="d-flex">
                                     <HomeOutlinedIcon />
-                                    <span>&nbsp;{ROOM_TYPE[e.room_type]}</span>
+                                    <span>&nbsp;{ROOM_TYPE[e?.room_type]}</span>
                                 </div>
                                 <div className="d-flex">
                                     <div className="d-flex mr-5">
                                         <GroupsIcon />
                                         <span>
-                                            &nbsp;{GENDER[e.room_gender]}
+                                            &nbsp;{GENDER[e?.room_gender]}
                                         </span>
                                     </div>
                                     <div className="d-flex mr-5">
                                         <GridViewIcon />
-                                        <span>&nbsp;{e.room_area}m²</span>
+                                        <span>&nbsp;{e?.room_area}m²</span>
                                     </div>
                                     <div className="d-flex text-info">
                                         <LocalAtmIcon />
                                         <span>
-                                            &nbsp;{getRoomPrice(e.room_price)}
+                                            &nbsp;{getRoomPrice(e?.room_price)}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="d-flex">
                                     <MyLocationIcon />
-                                    <span>&nbsp;{e.exact_room_address}</span>
+                                    <span>&nbsp;{e?.exact_room_address}</span>
                                 </div>
                             </div>
                         </div>

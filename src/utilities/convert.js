@@ -9,7 +9,12 @@ export const convertToVND = (price) => {
     });
 };
 
-export const convertTime = (time) => {
+export const convertTime = (t) => {
+    let time = t;
+    if (time < 10000000000) {
+        time = time * 1000;
+    }
+
     return new Date(time).toLocaleDateString('en', {
         day: '2-digit',
         month: '2-digit',

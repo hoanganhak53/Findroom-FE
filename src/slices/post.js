@@ -63,6 +63,96 @@ export const detailPostSilce = createAsyncThunk(
     }
 );
 
+export const getAllFavSilce = createAsyncThunk(
+    'room_fav/all',
+    async (body, thunkAPI) => {
+        try {
+            return await postService.getAllFavRoom(body);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
+export const deleteFavSilce = createAsyncThunk(
+    'room_fav/del',
+    async (body, thunkAPI) => {
+        try {
+            return await postService.deleteFavRoom(body);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
+export const addFavSilce = createAsyncThunk(
+    'room_fav/add',
+    async (body, thunkAPI) => {
+        try {
+            return await postService.addFavRoom(body);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
+export const allPersonalPost = createAsyncThunk(
+    'room/personal',
+    async (body, thunkAPI) => {
+        try {
+            return await postService.getAllPersonlRoom(body);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
+export const reportRoomSlice = createAsyncThunk(
+    'room/report',
+    async (body, thunkAPI) => {
+        try {
+            return await postService.postReportRoom(body);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
 const initialState = {
     isLoading: false,
 };
