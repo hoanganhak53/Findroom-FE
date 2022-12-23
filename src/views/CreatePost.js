@@ -42,6 +42,7 @@ const CreatePost = () => {
     const dispatch = useDispatch();
 
     const handleInputBody = (e) => {
+        console.log(e);
         const attribute = e.target.dataset?.body;
         const value = e.target.value;
         if (attribute) {
@@ -185,16 +186,15 @@ const CreatePost = () => {
                             <span className="input__span">m2</span>
                         </div>
                     </div>
-                    <div className="box__input">
+                    {/* <div className="box__input">
                         <p className="input__name">Sức chứa</p>
                         <input
                             type="text"
                             className="input__input input__input--row"
-                            placeholder="3 nam hoặc 2 nữ"
-                            // data-body="room_area"
-                            // onChange={handleInputBody}
-                        />
-                    </div>
+                            placeholder="3 nam hoặc 2 nữ" */}
+                    {/* // data-body="room_area" // onChange={handleInputBody} */}
+                    {/* />
+                    </div> */}
                 </div>
                 <div className="box__box display--block">
                     <div className="box__input">
@@ -209,7 +209,7 @@ const CreatePost = () => {
                     </div>
                 </div>
                 <FormControl>
-                    <FormLabel id="box__radio">Kiểu phòng ?</FormLabel>
+                    <FormLabel id="box__radio">Kiểu phòng?</FormLabel>
                     <RadioGroup
                         row
                         aria-labelledby="radio__group"
@@ -243,6 +243,31 @@ const CreatePost = () => {
                         />
                     </RadioGroup>
                 </FormControl>
+                <FormControl>
+                    <FormLabel id="box__radio">Giới tính?</FormLabel>
+                    <RadioGroup
+                        row
+                        aria-labelledby="radio__group"
+                        name="radio__group"
+                        // onChange={(e)=>console.log(e)}
+                    >
+                        <FormControlLabel
+                            value="male"
+                            control={<Radio />}
+                            label="Nam"
+                        />
+                        <FormControlLabel
+                            value="female"
+                            control={<Radio />}
+                            label="Nữ"
+                        />
+                        <FormControlLabel
+                            value="any"
+                            control={<Radio />}
+                            label="Nam và nữ"
+                        />
+                    </RadioGroup>
+                </FormControl>
                 <div className="box__box">
                     <div className="box__input">
                         <p className="input__name">Tiền điện</p>
@@ -263,7 +288,7 @@ const CreatePost = () => {
                             <input
                                 type="text"
                                 className="input__input input__input--row"
-                                placeholder="100,000"
+                                placeholder="30,000"
                                 data-body="water_price"
                                 onChange={handleInputBody}
                             />
