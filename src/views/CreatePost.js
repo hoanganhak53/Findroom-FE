@@ -29,10 +29,13 @@ import { createPostSchema } from '../utilities/schema';
 import KitchenIcon from '@mui/icons-material/Kitchen';
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import SecurityIcon from '@mui/icons-material/Security';
+// import { useParams } from 'react-router-dom';
 
 const MIN_IMG = 4;
 
 const CreatePost = () => {
+    // const { roomId } = useParams();
+
     const [body, setBody] = useState({});
     const [listImg, setListImg] = useState([]);
     const [loading, setLoading] = useState(false);

@@ -32,8 +32,8 @@ export const postPaginationSilce = createAsyncThunk(
                     total: 0,
                     sort: [
                         {
-                            property: 'string',
-                            direction: 'string',
+                            property: 'created_date',
+                            direction: 'desc',
                         },
                     ],
                     load_more_able: true,

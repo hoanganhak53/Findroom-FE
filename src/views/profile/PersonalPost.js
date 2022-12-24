@@ -48,7 +48,7 @@ export const PersonalPost = () => {
             </div>
             <br />
             {personalPost.length ? (
-                <PostList posts={personalPost} />
+                <PostList posts={personalPost} showControl={true} />
             ) : (
                 <p>Bạn chưa đăng bài viết nào</p>
             )}

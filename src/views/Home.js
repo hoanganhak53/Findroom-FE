@@ -6,9 +6,11 @@ import { TrendImg } from '../components/TrendImg';
 import { TREND_IMG } from '../constants/trend';
 import { postPaginationSilce } from '../slices/post';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [postPagination, setPostPagination] = useState([]);
     const isLoading = useSelector((state) => state.post.isLoading);
 
@@ -46,7 +48,11 @@ const Home = () => {
             <div className="m-card">
                 <div className="d-flex justify-content-between">
                     <h4 className="font-weight-bold">Phòng mới nhất</h4>
-                    <button type="button" className="btn btn-outline-primary">
+                    <button
+                        type="button"
+                        className="btn btn-outline-primary"
+                        onClick={() => navigate('/search')}
+                    >
                         Xem tất cả
                     </button>
                 </div>

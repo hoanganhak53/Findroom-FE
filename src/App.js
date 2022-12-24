@@ -21,6 +21,7 @@ import CreatePost from './views/CreatePost';
 import { PersonalPost } from './views/profile/PersonalPost';
 import { FavPost } from './views/profile/FavPost';
 import { EditProfile } from './views/profile/EditProfile';
+import { SearchPost } from './views/SearchPost';
 
 const App = () => {
     return (
@@ -46,17 +47,22 @@ const App = () => {
                         </Route>
                         <Route path="edit-profile" element={<EditProfile />} />
                         <Route path="create-post" element={<CreatePost />} />
+                        <Route
+                            path="edit-post/:roomId"
+                            element={<CreatePost />}
+                        />
+                        <Route path="search" element={<SearchPost />} />
                     </Route>
-                    <Route
-                        element={
-                            <RequireAuth
-                                allowedRoles={[ROLES.admin]}
-                                navigate="404"
-                            />
-                        }
-                    >
-                        <Route path="admin" element={<BoardAdmin />} />
-                    </Route>
+                </Route>
+                <Route
+                    element={
+                        <RequireAuth
+                            allowedRoles={[ROLES.admin]}
+                            navigate="404"
+                        />
+                    }
+                >
+                    <Route path="admin" element={<BoardAdmin />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>
