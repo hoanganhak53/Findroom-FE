@@ -26,8 +26,16 @@ import { showMessage } from '../slices/message';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { createPostSchema } from '../utilities/schema';
+import { generateAddressCode, generateAddressGoogleApis } from '../utilities/utils';
 
 const MIN_IMG = 4;
+const ROOM_TYPE = {
+    NOT_SHARED: 'NotShared',
+    SHARED: 'Shared',
+    HOUSE: 'House',
+    APARTMENT: 'Apartment',
+    DORMITORY: 'Dormitory',
+}
 
 const CreatePost = () => {
     const [body, setBody] = useState({})
@@ -38,11 +46,11 @@ const CreatePost = () => {
     const handleClose = () => setShow(false);
     const dispatch = useDispatch();
 
-    const handleInputBody = (e)=>{
+    const handleInputBody = (e) => {
         const attribute = e.target.dataset?.body
         const value = e.target.value
-        if(attribute){
-            setBody(prev=> {
+        if (attribute) {
+            setBody(prev => {
                 prev[attribute] = (value === '' || isNaN(value)) ? value : +value
                 return prev
             })
@@ -53,8 +61,8 @@ const CreatePost = () => {
     const handleClickTI = (item) => {
         item.currentTarget.classList.toggle('active');
         const attribute = item.currentTarget.dataset?.body
-        if(!attribute) return;
-        setBody(prev=> {
+        if (!attribute) return;
+        setBody(prev => {
             prev[attribute] = !prev[attribute]
             return prev
         })
@@ -90,11 +98,24 @@ const CreatePost = () => {
         );
     }, [setListImg]);
 
-    const handleSubmit = async ()=>{
-        setBody(prev => {
-            prev.upload_room_images = listImg
-            return prev
-        })
+    const handleSubmit = async () => {
+        const ggMapApis = await generateAddressGoogleApis(body.exact_room_address)
+        let geocoding_api = {}, full_address_object = {}
+        if(ggMapApis){
+            geocoding_api = {
+               location: ggMapApis.geometry.location,
+               viewport: ggMapApis.geometry.viewport,
+               location_type: ggMapApis.geometry.location_type
+           }
+
+           full_address_object = await generateAddressCode(ggMapApis.address_components)
+        }
+        setBody(prev => ({
+            ...prev,
+            ...geocoding_api,
+            ...full_address_object,
+            upload_room_images: listImg,
+        }))
         try {
             await createPostSchema.validate(body)
         } catch (error) {
@@ -188,8 +209,8 @@ const CreatePost = () => {
                             type="text"
                             className="input__input input__input--row"
                             placeholder="3 nam hoặc 2 nữ"
-                            // data-body="room_area"
-                            // onChange={handleInputBody}
+                        // data-body="room_area"
+                        // onChange={handleInputBody}
                         />
                     </div>
                 </div>
@@ -211,30 +232,30 @@ const CreatePost = () => {
                         row
                         aria-labelledby="radio__group"
                         name="radio__group"
-                        // onChange={(e)=>console.log(e)}
+                        onChange={(e)=>setBody(prev => ({...prev, room_type: e.target.value}))}
                     >
                         <FormControlLabel
-                            value="1"
+                            value={ROOM_TYPE.SHARED}
                             control={<Radio />}
                             label="Tìm người ở ghép"
                         />
                         <FormControlLabel
-                            value="2"
+                            value={ROOM_TYPE.NOT_SHARED}
                             control={<Radio />}
                             label="Tìm người ở thuê"
                         />
                         <FormControlLabel
-                            value="3"
+                            value={ROOM_TYPE.APARTMENT}
                             control={<Radio />}
                             label="Căn hộ"
                         />
                         <FormControlLabel
-                            value="4"
+                            value={ROOM_TYPE.DORMITORY}
                             control={<Radio />}
                             label="Homestay"
                         />
                         <FormControlLabel
-                            value="5"
+                            value={ROOM_TYPE.HOUSE}
                             control={<Radio />}
                             label="Nhà nguyên căn"
                         />
