@@ -17,6 +17,7 @@ export const FavPost = () => {
                 console.error(error);
             });
     }, [dispatch]);
+
     return (
         <div className="m-card">
             <div className="d-flex justify-content-between">
@@ -26,7 +27,7 @@ export const FavPost = () => {
             </div>
             <br />
             {favPost.length ? (
-                <PostList posts={favPost} />
+                <PostList posts={favPost.reverse()} />
             ) : (
                 <p>Bạn chưa thích bài viết nào</p>
             )}

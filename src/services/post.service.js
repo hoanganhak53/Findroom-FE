@@ -8,8 +8,16 @@ export class PostService {
     }
 }
 
-const getPostPagination = (body) => {
-    return axiosInstance.post(API_URL + 'room/search', body);
+const delPost = (postId) => {
+    return axiosInstance.delete(API_URL + `room/delete/${postId}`);
+};
+
+const getPostPagination = (body, page) => {
+    return axiosInstance.post(
+        API_URL +
+            `room/search?page=${page}&page_size=10&sort=created_date,desc`,
+        body
+    );
 };
 
 const getDetailPost = (params) => {
@@ -44,6 +52,7 @@ const postService = {
     deleteFavRoom,
     addFavRoom,
     getAllPersonlRoom,
+    delPost,
 };
 
 export default postService;

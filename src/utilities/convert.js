@@ -1,23 +1,22 @@
 export const getRoomPrice = (price) => {
-    return `${(price / 1000000).toFixed(1)} tr/phòng`;
+    return price ? `${(price / 1000000).toFixed(1)} tr/phòng` : '0 tr/phòng';
 };
 
 export const convertToVND = (price) => {
-    return price.toLocaleString('it-IT', {
-        style: 'currency',
-        currency: 'VND',
-    });
+    return price
+        ? price.toLocaleString('it-IT', {
+              style: 'currency',
+              currency: 'VND',
+          })
+        : '0 VND';
 };
 
-export const convertTime = (t) => {
-    let time = t;
-    if (time < 10000000000) {
-        time = time * 1000;
-    }
-
-    return new Date(time).toLocaleDateString('en', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
+export const convertTime = (time) => {
+    return time
+        ? new Date(time).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+          })
+        : '12/18/2022';
 };

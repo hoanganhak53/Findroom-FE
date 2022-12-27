@@ -29,13 +29,14 @@ import { createPostSchema } from '../utilities/schema';
 import KitchenIcon from '@mui/icons-material/Kitchen';
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import SecurityIcon from '@mui/icons-material/Security';
+import { useNavigate } from 'react-router-dom';
 // import { useParams } from 'react-router-dom';
 
 const MIN_IMG = 4;
 
 const CreatePost = () => {
     // const { roomId } = useParams();
-
+    const navigate = useNavigate();
     const [body, setBody] = useState({});
     const [listImg, setListImg] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -81,7 +82,7 @@ const CreatePost = () => {
                 multiple: true,
                 maxImageFileSize: 5000000,
                 maxImageWidth: 2000,
-                clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif'],
+                clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif', 'jfif'],
             },
             (error, result) => {
                 if (!error && result && result.event === 'success') {
@@ -125,6 +126,7 @@ const CreatePost = () => {
             .catch(() => {
                 setLoading(false);
             });
+        navigate('/profile');
     };
 
     return (
@@ -217,7 +219,12 @@ const CreatePost = () => {
                         row
                         aria-labelledby="radio__group"
                         name="radio__group"
-                        // onChange={(e)=>console.log(e)}
+                        onChange={(e) =>
+                            setBody((prev) => {
+                                prev.room_type = e.target.value;
+                                return prev;
+                            })
+                        }
                     >
                         <FormControlLabel
                             value="Shared"
@@ -252,7 +259,12 @@ const CreatePost = () => {
                         row
                         aria-labelledby="radio__group"
                         name="radio__group"
-                        // onChange={(e)=>console.log(e)}
+                        onChange={(e) =>
+                            setBody((prev) => {
+                                prev.room_gender = e.target.value;
+                                return prev;
+                            })
+                        }
                     >
                         <FormControlLabel
                             value="male"

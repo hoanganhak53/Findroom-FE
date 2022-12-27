@@ -34,7 +34,7 @@ export const EditProfile = () => {
                 multiple: false,
                 maxImageFileSize: 5000000,
                 maxImageWidth: 2000,
-                clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif'],
+                clientAllowedFormats: ['png', 'jpg', 'jpeg', 'gif', 'jfif'],
             },
             (error, result) => {
                 if (!error && result && result.event === 'success') {

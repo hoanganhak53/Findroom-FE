@@ -20,28 +20,27 @@ export const createPostSlice = createAsyncThunk(
     }
 );
 
-export const postPaginationSilce = createAsyncThunk(
+export const deletePost = createAsyncThunk(
     'room/postPagination',
-    async (thunkAPI) => {
+    async (postId, thunkAPI) => {
         try {
-            return await postService.getPostPagination({
-                pageable: {
-                    page: 1,
-                    page_size: 10,
-                    offset: 0,
-                    total: 0,
-                    sort: [
-                        {
-                            property: 'created_date',
-                            direction: 'desc',
-                        },
-                    ],
-                    load_more_able: true,
-                },
-            });
+            return await postService.delPost(postId);
         } catch {
             return thunkAPI.rejectWithValue();
         }
+    }
+);
+
+export const searchPostSlice = createAsyncThunk(
+    'room/search',
+    async (value) => {
+        try {
+            if (!value) return await postService.getPostPagination({}, 1);
+            return await postService.getPostPagination(
+                value?.body,
+                value?.page
+            );
+        } catch {}
     }
 );
 
@@ -161,13 +160,13 @@ const postSlice = createSlice({
     name: 'post',
     initialState,
     extraReducers: {
-        [postPaginationSilce.pending]: (state) => {
+        [searchPostSlice.pending]: (state) => {
             state.isLoading = true;
         },
-        [postPaginationSilce.fulfilled]: (state) => {
+        [searchPostSlice.fulfilled]: (state) => {
             state.isLoading = false;
         },
-        [postPaginationSilce.rejected]: (state) => {
+        [searchPostSlice.rejected]: (state) => {
             state.isLoading = false;
         },
         [detailPostSilce.pending]: (state) => {

@@ -7,7 +7,7 @@ export const TrendImg = (props) => {
     return (
         <figure
             className="figure active-hover"
-            onClick={() => navigate('/search')}
+            onClick={() => navigate('/search/1')}
         >
             <img
                 src={props.src}

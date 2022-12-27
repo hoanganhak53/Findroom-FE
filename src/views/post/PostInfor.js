@@ -14,40 +14,40 @@ export const PostInfor = ({ room }) => {
                     <HomeRoundedIcon color="primary" />
                     <h5 className="font-weight-bold">&nbsp;Thông tin phòng</h5>
                 </div>
-                <div className="pt-1 d-flex justify-content-between">
-                    <div>
+                <div className="pt-1 d-flex">
+                    <div className="w-25">
                         <span className="text-muted">Giá phòng</span>
                         <p>{convertToVND(room.room_price)}</p>
                     </div>
-                    <div>
+                    <div className="w-25">
                         <span className="text-muted">Diện tích</span>
                         <p>{room.room_area} mét vuông</p>
                     </div>
-                    <div>
+                    <div className="w-25">
                         <span className="text-muted">Đặt cọc</span>
                         <p>{convertToVND(room.deposit)}</p>
                     </div>
-                    <div>
+                    <div className="w-25">
                         <span className="text-muted">Kiểu phòng</span>
                         <p>{ROOM_TYPE[room.room_type]}</p>
                     </div>
                 </div>
-                <div className="d-flex justify-content-between">
-                    <div>
+                <div className="d-flex">
+                    <div className="w-25">
                         <span className="text-muted">Trạng thái</span>
                         <p className="text-success">
                             {room.pending ? 'Hết phòng' : 'Còn phòng'}
                         </p>
                     </div>
-                    <div>
+                    <div className="w-25">
                         <span className="text-muted">Tiền điện</span>
                         <p>{convertToVND(room.electric_price)}/số</p>
                     </div>
-                    <div>
+                    <div className="w-25">
                         <span className="text-muted">Tiền nước</span>
                         <p>{convertToVND(room.water_price)}/số</p>
                     </div>
-                    <div>
+                    <div className="w-25">
                         <span className="text-muted">Giới tính</span>
                         <p>{GENDER[room.room_gender]}</p>
                     </div>

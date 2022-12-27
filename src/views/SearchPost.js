@@ -20,7 +20,12 @@ import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Radio, RadioGroup } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchPostSlice } from '../slices/post';
+import { PostList } from '../components/PostList';
+import { PaginationComponent } from '../components/PaginationComponent';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const MIN_DISTANCE = 1;
 
@@ -40,13 +45,26 @@ function priceText(value) {
 }
 
 export const SearchPost = () => {
+    const { page: currentPage } = useParams();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const isLoading = useSelector((state) => state.post.isLoading);
+    const [postPagination, setPostPagination] = React.useState([]);
+    const [totalPost, setTotalPost] = React.useState(10);
     const [price, setPrice] = React.useState([0, 30]);
+    const [utilities, setUtilities] = React.useState([]);
+    const [room_type, setRoomType] = React.useState([]);
+    const [room_gender, setRoomGender] = React.useState([]);
+
+    const handleChangePage = (event, page) => {
+        navigate(`/search/${page}`);
+        search(page);
+    };
 
     const handleChangePrice = (event, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
             return;
         }
-
         if (newValue[1] - newValue[0] < MIN_DISTANCE) {
             if (activeThumb === 0) {
                 const clamped = Math.min(newValue[0], 30 - MIN_DISTANCE);
@@ -60,16 +78,78 @@ export const SearchPost = () => {
         }
     };
 
-    const handleClickTI = (item) => {
+    const handleClickTI = (item, value) => {
         item.currentTarget.classList.toggle('active');
+        if (!utilities.includes(value))
+            setUtilities((prev) => {
+                return [...prev, value];
+            });
+        else
+            setUtilities((prev) => {
+                return prev.filter((g) => g !== value);
+            });
     };
+
+    const search = (page) => {
+        const body = {
+            // search: {
+            //     location: {},
+            //     query: {},
+            // },
+            filter: {},
+        };
+        body.filter.price = {
+            from: price[0] * 500000,
+            to: price[1] * 500000,
+        };
+        if (room_type.length) {
+            body.filter.room_type = [...room_type];
+        }
+        if (room_gender.length) {
+            body.filter.room_gender = [...room_gender];
+        }
+        if (utilities.length) {
+            body.filter.utilities = [...utilities];
+        }
+        dispatch(
+            searchPostSlice({
+                body,
+                page,
+            })
+        )
+            .unwrap()
+            .then((res) => {
+                setPostPagination(res.data.result);
+                setTotalPost(res.data.total);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    React.useEffect(() => {
+        dispatch(searchPostSlice())
+            .unwrap()
+            .then((res) => {
+                setPostPagination(res.data.result);
+                setTotalPost(res.data.total);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [dispatch]);
 
     return (
         <React.Fragment>
             <div className="m-card">
                 <div className="d-flex justify-content-between mb-3">
                     <h4 className="font-weight-bold">Bộ lọc</h4>
-                    <button className="btn btn-primary">Áp dụng</button>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => search(currentPage)}
+                    >
+                        Áp dụng
+                    </button>
                 </div>
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -97,24 +177,25 @@ export const SearchPost = () => {
                     <AccordionDetails className="box__container">
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="parking_situation"
+                            onClick={(e) =>
+                                handleClickTI(e, 'parking_situation')
+                            }
                         >
                             <TwoWheelerIcon />
                             <span className="button__name">Chỗ để xe</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="air_conditioner"
+                            onClick={(e) => handleClickTI(e, 'air_conditioner')}
                         >
                             <AspectRatioIcon />
                             <span className="button__name">Máy lạnh</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="share_home_as_landlord"
+                            onClick={(e) =>
+                                handleClickTI(e, 'share_home_as_landlord')
+                            }
                         >
                             <KeyIcon />
                             <span className="button__name">
@@ -123,72 +204,69 @@ export const SearchPost = () => {
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_pets_allowed"
+                            onClick={(e) =>
+                                handleClickTI(e, 'room_pets_allowed')
+                            }
                         >
                             <PetsIcon />
                             <span className="button__name">Thú cưng</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_kitchen"
+                            onClick={(e) => handleClickTI(e, 'room_kitchen')}
                         >
                             <RestaurantIcon />
                             <span className="button__name">Nhà bếp</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_bed"
+                            onClick={(e) => handleClickTI(e, 'room_bed')}
                         >
                             <AirlineSeatFlatIcon />
                             <span className="button__name">Giường ngủ</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_bathroom"
+                            onClick={(e) => handleClickTI(e, 'room_bathroom')}
                         >
                             <LocalDrinkIcon />
                             <span className="button__name">WC riêng</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_tivi"
+                            onClick={(e) => handleClickTI(e, 'room_tivi')}
                         >
                             <TvIcon />
                             <span className="button__name">TV</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_closet"
+                            onClick={(e) => handleClickTI(e, 'room_closet')}
                         >
                             <CalendarViewMonthIcon />
                             <span className="button__name">Tủ đồ</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_refrigerator"
+                            onClick={(e) =>
+                                handleClickTI(e, 'room_refrigerator')
+                            }
                         >
                             <KitchenIcon />
                             <span className="button__name">Tủ lạnh</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="room_washing_machine"
+                            onClick={(e) =>
+                                handleClickTI(e, 'room_washing_machine')
+                            }
                         >
                             <LocalLaundryServiceIcon />
                             <span className="button__name">Máy giặt</span>
                         </div>
                         <div
                             className="box__button"
-                            onClick={handleClickTI}
-                            data-body="security_guard"
+                            onClick={(e) => handleClickTI(e, 'security_guard')}
                         >
                             <SecurityIcon />
                             <span className="button__name">Bảo vệ</span>
@@ -200,7 +278,21 @@ export const SearchPost = () => {
                         <Typography>Loại phòng</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <FormGroup row>
+                        <FormGroup
+                            row
+                            onChange={(e) => {
+                                if (!room_type.includes(e.target.value))
+                                    setRoomType((prev) => {
+                                        return [...prev, e.target.value];
+                                    });
+                                else
+                                    setRoomType((prev) => {
+                                        return prev.filter(
+                                            (g) => g !== e.target.value
+                                        );
+                                    });
+                            }}
+                        >
                             <FormControlLabel
                                 value="Shared"
                                 control={<Checkbox />}
@@ -234,34 +326,65 @@ export const SearchPost = () => {
                         <Typography>Giới tính</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <RadioGroup row>
+                        <FormGroup
+                            row
+                            onChange={(e) => {
+                                if (!room_gender.includes(e.target.value))
+                                    setRoomGender((prev) => {
+                                        return [...prev, e.target.value];
+                                    });
+                                else
+                                    setRoomGender((prev) => {
+                                        return prev.filter(
+                                            (g) => g !== e.target.value
+                                        );
+                                    });
+                            }}
+                        >
                             <FormControlLabel
                                 value="male"
-                                control={<Radio />}
+                                control={<Checkbox />}
                                 label="Nam"
                             />
                             <FormControlLabel
                                 value="female"
-                                control={<Radio />}
+                                control={<Checkbox />}
                                 label="Nữ"
                             />
                             <FormControlLabel
                                 value="any"
-                                control={<Radio />}
+                                control={<Checkbox />}
                                 label="Nam và nữ"
                             />
-                        </RadioGroup>
+                        </FormGroup>
                     </AccordionDetails>
                 </Accordion>
-                <Accordion>
+                {/* <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>Vị trí</Typography>
                     </AccordionSummary>
                     <AccordionDetails>Vị trí</AccordionDetails>
-                </Accordion>
+                </Accordion> */}
             </div>
             <div className="m-card">
                 <h4 className="font-weight-bold">Kết quả</h4>
+                <br />
+                {isLoading && <CircularProgress />}
+                {postPagination.length === 0 && !isLoading && (
+                    <p>Không tìm thấy bài đăng phù hợp</p>
+                )}
+                {postPagination.length !== 0 && !isLoading && (
+                    <React.Fragment>
+                        <PostList
+                            posts={postPagination.filter((e) => !e.disabled)}
+                        />
+                        <PaginationComponent
+                            totalTasks={totalPost}
+                            paginate={handleChangePage}
+                            currentPage={Number(currentPage)}
+                        />
+                    </React.Fragment>
+                )}
             </div>
         </React.Fragment>
     );

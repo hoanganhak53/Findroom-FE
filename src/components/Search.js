@@ -57,7 +57,7 @@ function Search({ placeholder }) {
 
     const handleKeypress = (e) => {
         if (e.key === 'Enter') {
-            navigate('/search');
+            navigate('/search/1');
             setText('');
         }
     };

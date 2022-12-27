@@ -51,7 +51,7 @@ const App = () => {
                             path="edit-post/:roomId"
                             element={<CreatePost />}
                         />
-                        <Route path="search" element={<SearchPost />} />
+                        <Route path="search/:page" element={<SearchPost />} />
                     </Route>
                 </Route>
                 <Route

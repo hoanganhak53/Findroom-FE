@@ -13,7 +13,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 
-export const PostList = ({ posts, showControl = false }) => {
+export const PostList = ({ posts, showControl = false, deletePost }) => {
     const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -23,6 +23,11 @@ export const PostList = ({ posts, showControl = false }) => {
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleDelete = (postId) => {
+        deletePost(postId);
+        handleClose();
     };
 
     return (
@@ -79,7 +84,11 @@ export const PostList = ({ posts, showControl = false }) => {
                                                     },
                                                 }}
                                             >
-                                                <MenuItem onClick={handleClose}>
+                                                <MenuItem
+                                                    onClick={() =>
+                                                        handleDelete(e._id)
+                                                    }
+                                                >
                                                     <DeleteOutlineIcon /> Xóa
                                                     bài đăng
                                                 </MenuItem>
