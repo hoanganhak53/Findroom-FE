@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-// import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
 // import WifiIcon from '@mui/icons-material/Wifi';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
@@ -31,8 +31,16 @@ import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import SecurityIcon from '@mui/icons-material/Security';
 import { useNavigate } from 'react-router-dom';
 // import { useParams } from 'react-router-dom';
+import { generateAddressCode, generateAddressGoogleApis } from '../utilities/utils';
 
 const MIN_IMG = 4;
+const ROOM_TYPE = {
+    NOT_SHARED: 'NotShared',
+    SHARED: 'Shared',
+    HOUSE: 'House',
+    APARTMENT: 'Apartment',
+    DORMITORY: 'Dormitory',
+}
 
 const CreatePost = () => {
     // const { roomId } = useParams();
@@ -46,27 +54,26 @@ const CreatePost = () => {
     const dispatch = useDispatch();
 
     const handleInputBody = (e) => {
-        console.log(e);
-        const attribute = e.target.dataset?.body;
-        const value = e.target.value;
+        const attribute = e.target.dataset?.body
+        const value = e.target.value
         if (attribute) {
-            setBody((prev) => {
-                prev[attribute] = value === '' || isNaN(value) ? value : +value;
-                return prev;
-            });
+            setBody(prev => {
+                prev[attribute] = (value === '' || isNaN(value)) ? value : +value
+                return prev
+            })
         }
         console.log(body);
     };
 
     const handleClickTI = (item) => {
         item.currentTarget.classList.toggle('active');
-        const attribute = item.currentTarget.dataset?.body;
+        const attribute = item.currentTarget.dataset?.body
         if (!attribute) return;
-        setBody((prev) => {
-            prev[attribute] = !prev[attribute];
-            return prev;
-        });
-        console.log(body);
+        setBody(prev => {
+            prev[attribute] = !prev[attribute]
+            return prev
+        })
+        console.log(body)
     };
 
     const cloudinaryRef = useRef();
@@ -99,10 +106,23 @@ const CreatePost = () => {
     }, [setListImg]);
 
     const handleSubmit = async () => {
-        setBody((prev) => {
-            prev.upload_room_images = listImg;
-            return prev;
-        });
+        const ggMapApis = await generateAddressGoogleApis(body.exact_room_address)
+        let geocoding_api = {}, full_address_object = {}
+        if(ggMapApis){
+            geocoding_api = {
+               location: ggMapApis.geometry.location,
+               viewport: ggMapApis.geometry.viewport,
+               location_type: ggMapApis.geometry.location_type
+           }
+
+           full_address_object = await generateAddressCode(ggMapApis.address_components)
+        }
+        setBody(prev => ({
+            ...prev,
+            ...geocoding_api,
+            ...full_address_object,
+            upload_room_images: listImg,
+        }))
         try {
             await createPostSchema.validate(body);
         } catch (error) {
@@ -191,15 +211,16 @@ const CreatePost = () => {
                             <span className="input__span">m2</span>
                         </div>
                     </div>
-                    {/* <div className="box__input">
+                    <div className="box__input">
                         <p className="input__name">Sức chứa</p>
                         <input
                             type="text"
                             className="input__input input__input--row"
-                            placeholder="3 nam hoặc 2 nữ" */}
-                    {/* // data-body="room_area" // onChange={handleInputBody} */}
-                    {/* />
-                    </div> */}
+                            placeholder="3 nam hoặc 2 nữ"
+                        // data-body="room_area"
+                        // onChange={handleInputBody}
+                        />
+                    </div>
                 </div>
                 <div className="box__box display--block">
                     <div className="box__input">
@@ -219,35 +240,30 @@ const CreatePost = () => {
                         row
                         aria-labelledby="radio__group"
                         name="radio__group"
-                        onChange={(e) =>
-                            setBody((prev) => {
-                                prev.room_type = e.target.value;
-                                return prev;
-                            })
-                        }
+                        onChange={(e)=>setBody(prev => ({...prev, room_type: e.target.value}))}
                     >
                         <FormControlLabel
-                            value="Shared"
+                            value={ROOM_TYPE.SHARED}
                             control={<Radio />}
                             label="Phòng ở ghép"
                         />
                         <FormControlLabel
-                            value="NotShared"
+                            value={ROOM_TYPE.NOT_SHARED}
                             control={<Radio />}
                             label="Phòng cho thuê"
                         />
                         <FormControlLabel
-                            value="Apartment"
+                            value={ROOM_TYPE.APARTMENT}
                             control={<Radio />}
                             label="Căn hộ"
                         />
                         <FormControlLabel
-                            value="Dormitory"
+                            value={ROOM_TYPE.DORMITORY}
                             control={<Radio />}
                             label="Homestay"
                         />
                         <FormControlLabel
-                            value="House"
+                            value={ROOM_TYPE.HOUSE}
                             control={<Radio />}
                             label="Nhà nguyên căn"
                         />
@@ -320,10 +336,10 @@ const CreatePost = () => {
                     Tiện ích
                 </h3>
                 <div className="box__container">
-                    {/* <div className="box__button" onClick={handleClickTI}>
+                    <div className="box__button" onClick={handleClickTI}>
                         <AccessAlarmIcon />
                         <span className="button__name">Giờ giấc tự do</span>
-                    </div> */}
+                    </div>
                     <div
                         className="box__button"
                         onClick={handleClickTI}
