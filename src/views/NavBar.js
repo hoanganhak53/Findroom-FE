@@ -64,7 +64,7 @@ export const NavBar = () => {
                 <Search placeholder="Tìm kiếm phòng trên findroom" />
                 <li className="nav-item">
                     <Link
-                        to={'/'}
+                        to={'/chat'}
                         className="nav-link d-flex align-items-center"
                     >
                         <EmailIcon />

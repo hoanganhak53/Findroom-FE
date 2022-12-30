@@ -44,10 +44,7 @@ export const PostDetail = () => {
                     <PostDesc desc={room.notes} />
                 </Fragment>
             ) : (
-                <div
-                    className="justify-content-center d-flex mt-5"
-                    style={{ marginBottom: '208px' }}
-                >
+                <div className="justify-content-center d-flex mt-5">
                     <CircularProgress size="5rem" />
                 </div>
             )}

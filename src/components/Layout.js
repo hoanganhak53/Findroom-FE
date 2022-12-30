@@ -1,6 +1,6 @@
 import { Snackbar } from '@mui/material';
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Footer } from '../views/Footer';
 import { NavBar } from '../views/NavBar';
 import MuiAlert from '@mui/material/Alert';
@@ -12,6 +12,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const Layout = () => {
+    const { pathname } = useLocation();
     const open = useSelector((state) => state.message.isShow);
     const message = useSelector((state) => state.message.message);
     const severity = useSelector((state) => state.message.severity);
@@ -26,10 +27,13 @@ const Layout = () => {
     return (
         <React.Fragment>
             <NavBar />
-            <div className="container mt-3 pl-5 pr-5">
+            <div
+                className="container mt-3 pl-5 pr-5"
+                style={{ minHeight: '41vh' }}
+            >
                 <Outlet />
             </div>
-            <Footer />
+            {!pathname.includes('chat') && <Footer />}
             <Snackbar open={open} autoHideDuration={3500} onClose={handleClose}>
                 <Alert
                     onClose={handleClose}

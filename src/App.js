@@ -22,6 +22,7 @@ import { PersonalPost } from './views/profile/PersonalPost';
 import { FavPost } from './views/profile/FavPost';
 import { EditProfile } from './views/profile/EditProfile';
 import { SearchPost } from './views/SearchPost';
+import { Chat } from './views/chat/Chat';
 
 const App = () => {
     return (
@@ -31,6 +32,7 @@ const App = () => {
                     <Route path="" element={<Navigate to="home" replace />} />
                     <Route path="home" element={<Home />} />
                     <Route path="room/:roomId" element={<PostDetail />} />
+                    <Route path="search/:page" element={<SearchPost />} />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
                     <Route
@@ -51,7 +53,7 @@ const App = () => {
                             path="edit-post/:roomId"
                             element={<CreatePost />}
                         />
-                        <Route path="search/:page" element={<SearchPost />} />
+                        <Route path="chat" element={<Chat />} />
                     </Route>
                 </Route>
                 <Route
