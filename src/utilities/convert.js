@@ -1,3 +1,5 @@
+import moment from 'moment/moment';
+
 export const getRoomPrice = (price) => {
     return price ? `${(price / 1000000).toFixed(1)} tr/phòng` : '0 tr/phòng';
 };
@@ -12,11 +14,20 @@ export const convertToVND = (price) => {
 };
 
 export const convertTime = (time) => {
-    return time
-        ? new Date(time).toLocaleDateString('en-GB', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-          })
-        : '12/18/2022';
+    if (!time) return '12/18/2022';
+    let newTime = time;
+    if (time < 100000000000) newTime *= 1000;
+    return new Date(newTime).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
+};
+
+export const convertTimeMessage = (time) => {
+    if (!time) return '10:12 13 tháng 1, 2023';
+    if (new Date() - time * 1000 > 86400000) {
+        return moment(time * 1000).format('HH:mm D [tháng] M, YYYY');
+    }
+    return moment(time * 1000).fromNow();
 };

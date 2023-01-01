@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import { login } from "../slices/auth";
-import { clearMessage } from "../slices/message";
-import { loginSchema } from "../utilities/schema";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { login } from '../slices/auth';
+import { clearMessage } from '../slices/message';
+import { loginSchema } from '../utilities/schema';
 
 const Login = () => {
     let navigate = useNavigate();
@@ -20,18 +20,18 @@ const Login = () => {
     }, [dispatch]);
 
     const initialValues = {
-        username: "",
-        password: "",
+        username: '',
+        password: '',
     };
 
-    const handleLogin = (formValue) => {
+    const handleLogin = async (formValue) => {
         const { username, password } = formValue;
         setLoading(true);
 
-        dispatch(login({ username, password }))
+        await dispatch(login({ username, password }))
             .unwrap()
-            .then(() => {
-                navigate("/profile");
+            .then(async () => {
+                navigate('/profile');
                 window.location.reload();
             })
             .catch(() => {
@@ -59,7 +59,11 @@ const Login = () => {
                     <Form>
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
-                            <Field name="username" type="text" className="form-control" />
+                            <Field
+                                name="username"
+                                type="text"
+                                className="form-control"
+                            />
                             <ErrorMessage
                                 name="username"
                                 component="div"
@@ -69,7 +73,11 @@ const Login = () => {
 
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <Field name="password" type="password" className="form-control" />
+                            <Field
+                                name="password"
+                                type="password"
+                                className="form-control"
+                            />
                             <ErrorMessage
                                 name="password"
                                 component="div"
@@ -78,7 +86,11 @@ const Login = () => {
                         </div>
 
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                            <button
+                                type="submit"
+                                className="btn btn-primary btn-block"
+                                disabled={loading}
+                            >
                                 {loading && (
                                     <span className="spinner-border spinner-border-sm"></span>
                                 )}
@@ -87,9 +99,7 @@ const Login = () => {
                         </div>
                         <div className="form-group d-flex align-items-center justify-content-center">
                             <span>Chưa có tài khoản?&nbsp;</span>
-                            <Link to={"/register"}>
-                                Đăng ký ngay
-                            </Link>
+                            <Link to={'/register'}>Đăng ký ngay</Link>
                         </div>
                     </Form>
                 </Formik>

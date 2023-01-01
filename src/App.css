@@ -186,3 +186,10 @@ label {
 .m-chatbox.active {
     background-color: #f0f6ff;
 }
+
+.message-box {
+    position: fixed;
+    bottom: 54px;
+    right: 54px;
+    z-index: 10000;
+}

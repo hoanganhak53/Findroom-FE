@@ -12,7 +12,7 @@ export const SideBar = () => {
                 <div className="input-group">
                     <input
                         type="text"
-                        class="form-control"
+                        className="form-control"
                         placeholder="Tìm kiếm chủ nhà"
                     />
                 </div>

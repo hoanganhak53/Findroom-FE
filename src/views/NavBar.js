@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import eventBus from '../common/EventBus';
 import { logout } from '../slices/auth';
 import Search from '../components/Search';
@@ -13,11 +13,13 @@ import Logout from '@mui/icons-material/Logout';
 import { ROLES } from '../constants/roles';
 import Dropdown from 'react-bootstrap/Dropdown';
 import PersonIcon from '@mui/icons-material/Person';
+import { firestore } from './chat/firebase/firebase';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 
 export const NavBar = () => {
     //role
     const [showAdminBoard, setShowAdminBoard] = useState(false);
-
+    const navigate = useNavigate();
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
@@ -40,6 +42,30 @@ export const NavBar = () => {
             eventBus.remove('logout');
         };
     }, [currentUser, logOut]);
+
+    const openChat = async () => {
+        const user = currentUser.email.split('.')[0];
+        const queryConverstation = query(
+            collection(firestore, 'conversation'),
+            where(user, '==', true),
+            where('admin@gmail', '==', true)
+        );
+        await getDocs(queryConverstation).then((c) => {
+            if (c.docs.length === 1) {
+                navigate(`/chat/${c.docs[0].id}`);
+            } else {
+                const docData = {};
+                docData[user] = true;
+                docData['admin@gmail'] = true;
+                docData['full_email'] = [currentUser.email, 'admin@gmail.com'];
+                addDoc(collection(firestore, 'conversation'), docData).then(
+                    (c) => {
+                        navigate(`/chat/${c.id}`);
+                    }
+                );
+            }
+        });
+    };
 
     return (
         <nav className="navbar navbar-expand navbar-dark bg-primary">
@@ -64,7 +90,7 @@ export const NavBar = () => {
                 <Search placeholder="Tìm kiếm phòng trên findroom" />
                 <li className="nav-item">
                     <Link
-                        to={'/chat'}
+                        onClick={openChat}
                         className="nav-link d-flex align-items-center"
                     >
                         <EmailIcon />

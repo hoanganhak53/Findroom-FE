@@ -53,7 +53,7 @@ const App = () => {
                             path="edit-post/:roomId"
                             element={<CreatePost />}
                         />
-                        <Route path="chat" element={<Chat />} />
+                        <Route path="chat/:chatId" element={<Chat />} />
                     </Route>
                 </Route>
                 <Route
