@@ -58,7 +58,7 @@ export const SearchPost = () => {
 
     const handleChangePage = (event, page) => {
         navigate(`/search/${page}`);
-        search(page);
+        search(page, false);
     };
 
     const handleChangePrice = (event, newValue, activeThumb) => {
@@ -90,7 +90,13 @@ export const SearchPost = () => {
             });
     };
 
-    const search = (page) => {
+    const search = (currentPage, newSearch) => {
+        let page = currentPage;
+        if (newSearch) {
+            navigate(`/search/1`);
+            page = 1;
+        }
+
         const body = {
             // search: {
             //     location: {},
@@ -128,7 +134,12 @@ export const SearchPost = () => {
     };
 
     React.useEffect(() => {
-        dispatch(searchPostSlice())
+        dispatch(
+            searchPostSlice({
+                body: {},
+                page: currentPage,
+            })
+        )
             .unwrap()
             .then((res) => {
                 setPostPagination(res.data.result);
@@ -137,7 +148,9 @@ export const SearchPost = () => {
             .catch((error) => {
                 console.error(error);
             });
-    }, [dispatch]);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <React.Fragment>
@@ -146,7 +159,7 @@ export const SearchPost = () => {
                     <h4 className="font-weight-bold">Bộ lọc</h4>
                     <button
                         className="btn btn-primary"
-                        onClick={() => search(currentPage)}
+                        onClick={() => search(currentPage, true)}
                     >
                         Áp dụng
                     </button>
@@ -367,7 +380,9 @@ export const SearchPost = () => {
                 </Accordion> */}
             </div>
             <div className="m-card">
-                <h4 className="font-weight-bold">Kết quả</h4>
+                <h4 className="font-weight-bold">
+                    Kết quả - {totalPost} bài viết
+                </h4>
                 <br />
                 {isLoading && <CircularProgress />}
                 {postPagination.length === 0 && !isLoading && (
