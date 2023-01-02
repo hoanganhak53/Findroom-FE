@@ -164,6 +164,7 @@ label {
 }
 
 .m-mess {
+    overflow-wrap: break-word;
     margin-left: 20px;
     background-color: #007bff;
     color: white;
@@ -172,11 +173,26 @@ label {
     max-width: 60%;
 }
 
+.m-mess a {
+    text-decoration: underline;
+    color: #fff;
+}
+
 .m-mess.owner {
     margin-right: 20px;
     background-color: #9f9f9f;
     color: white;
     border-radius: 10px 0px 10px 10px;
+}
+
+.m-mess-img {
+    margin-left: 20px;
+    border-radius: 5px;
+    max-width: 60%;
+}
+
+.m-mess-img.owner {
+    margin-right: 20px;
 }
 
 .m-chatbox:hover {

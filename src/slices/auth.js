@@ -91,6 +91,17 @@ export const editUserProfile = createAsyncThunk(
     }
 );
 
+export const listUserByEmail = createAsyncThunk(
+    'user/listByEmail',
+    async (body, thunkAPI) => {
+        try {
+            return await userService.getUserByEmail(body);
+        } catch {
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
 export const logout = createAsyncThunk('auth/logout', async () => {
     await AuthService.logout();
 });

@@ -12,7 +12,16 @@ import { useSelector } from 'react-redux';
 import { convertTimeMessage } from '../../../utilities/convert';
 import { firestore } from '../firebase/firebase';
 
-export const Message = ({ converstationId }) => {
+function linkify(text) {
+    /* eslint-disable no-useless-escape */
+    const urlRegex =
+        /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+    return text.replace(urlRegex, function (url) {
+        return '<a href="' + url + '" target="_blank">' + url + '</a>';
+    });
+}
+
+export const Message = ({ converstationId, targetAvt }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const dummy = useRef();
     const [listMessage, setListMessage] = useState(null);
@@ -79,7 +88,7 @@ export const Message = ({ converstationId }) => {
                                     ? 'flex-row-reverse'
                                     : ''
                             }`}
-                            key={e.data().created_at.seconds}
+                            key={e.id}
                         >
                             {e.data()?.sender === currentUser.id ? (
                                 <Avatar
@@ -87,7 +96,10 @@ export const Message = ({ converstationId }) => {
                                     src={currentUser.avatar_url}
                                 />
                             ) : (
-                                <Avatar sx={{ width: 40, height: 40 }} />
+                                <Avatar
+                                    sx={{ width: 40, height: 40 }}
+                                    src={targetAvt}
+                                />
                             )}
                             <Tooltip
                                 title={convertTimeMessage(
@@ -95,15 +107,28 @@ export const Message = ({ converstationId }) => {
                                 )}
                                 placement="left"
                             >
-                                <div
-                                    className={`m-mess ${
-                                        e.data()?.sender === currentUser.id
-                                            ? 'owner'
-                                            : ''
-                                    }`}
-                                >
-                                    {e.data()?.content}
-                                </div>
+                                {e.data()?.img_url ? (
+                                    <img
+                                        src={e.data()?.img_url}
+                                        alt="attach_img"
+                                        className={`m-mess-img ${
+                                            e.data()?.sender === currentUser.id
+                                                ? 'owner'
+                                                : ''
+                                        }`}
+                                    />
+                                ) : (
+                                    <div
+                                        className={`m-mess ${
+                                            e.data()?.sender === currentUser.id
+                                                ? 'owner'
+                                                : ''
+                                        }`}
+                                        dangerouslySetInnerHTML={{
+                                            __html: linkify(e.data()?.content),
+                                        }}
+                                    />
+                                )}
                             </Tooltip>
                         </div>
                     ))}

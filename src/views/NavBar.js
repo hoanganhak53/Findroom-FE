@@ -89,13 +89,23 @@ export const NavBar = () => {
             <div className="navbar-nav ml-auto">
                 <Search placeholder="Tìm kiếm phòng trên findroom" />
                 <li className="nav-item">
-                    <Link
-                        onClick={openChat}
-                        className="nav-link d-flex align-items-center"
-                    >
-                        <EmailIcon />
-                        <span>&nbsp;Nhắn tin</span>
-                    </Link>
+                    {currentUser?.email === 'admin@gmail.com' ? (
+                        <Link
+                            onClick={openChat}
+                            className="nav-link d-flex align-items-center"
+                        >
+                            <EmailIcon />
+                            <span>&nbsp;Nhắn tin</span>
+                        </Link>
+                    ) : (
+                        <Link
+                            className="nav-link d-flex align-items-center"
+                            to={'/chat/O3rvH4Oe69qx9tK91gCx'}
+                        >
+                            <EmailIcon />
+                            <span>&nbsp;Nhắn tin</span>
+                        </Link>
+                    )}
                 </li>
                 <li className="nav-item">
                     <Link

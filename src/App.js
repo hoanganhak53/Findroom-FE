@@ -38,7 +38,7 @@ const App = () => {
                     <Route
                         element={
                             <RequireAuth
-                                allowedRoles={[ROLES.user]}
+                                allowedRoles={[ROLES.user, ROLES.admin]}
                                 navigate="404"
                             />
                         }

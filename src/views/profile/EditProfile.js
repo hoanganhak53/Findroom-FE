@@ -59,9 +59,8 @@ export const EditProfile = () => {
 
     const initialValues = {
         username: currentUser.username,
-        email: currentUser.email,
         full_name: currentUser?.full_name ? currentUser?.full_name : '',
-        phone_number: currentUser.phone_number,
+        phone_number: currentUser.phone_number ? currentUser.phone_number : '',
     };
 
     const initialPassValues = {
@@ -166,19 +165,6 @@ export const EditProfile = () => {
                                     />
                                     <ErrorMessage
                                         name="username"
-                                        component="div"
-                                        className="alert alert-danger"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="email">Email</label>
-                                    <Field
-                                        name="email"
-                                        type="text"
-                                        className="form-control"
-                                    />
-                                    <ErrorMessage
-                                        name="email"
                                         component="div"
                                         className="alert alert-danger"
                                     />
