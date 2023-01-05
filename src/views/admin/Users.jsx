@@ -1,12 +1,13 @@
 import React from 'react'
 import Header from '../../components/Header'
-import EnhancedTable from './Table'
+import {EnhancedTableUsers} from './Table'
+import AdminService from '../../services/admin.service';
 
 const headCells = [
     {
-      id: 'name',
+      id: 'username',
       numeric: false,
-      disablePadding: true,
+      disablePadding: false,
       label: 'Tài khoản',
     },
     {
@@ -41,10 +42,34 @@ const headCells = [
   ];
 
 const Users = () => {
+  const [page, setPage] =  React.useState(0)
+  const [limit, setLimit] =  React.useState(10)
+  const [total, setTotal] =  React.useState(0)
+  const [users, setUsers] = React.useState([])
+    React.useEffect(()=>{
+      const callApi = async () => {
+        try {
+          const res = await AdminService.getUsersAdmin(page, limit)
+          setUsers(res.data.result)
+          setTotal(res.data.total)
+        } catch (error) {
+          console.log("error", error)
+        }
+      }
+      callApi()
+    }, [page, limit])
     return (
         <div className='admin__users'>
             <Header title={'Tài khoản khách hàng'} />
-            <EnhancedTable title={'Tất cả tài khoản'} headCells={headCells}/>
+            <EnhancedTableUsers title={'Tất cả tài khoản'} 
+              headCells={headCells} 
+              rows={users} 
+              setRowsPerPage={setLimit} 
+              rowsPerPage={limit} 
+              setPage={setPage} 
+              page={page}
+              total={total}
+            />
         </div>
     )
 }
