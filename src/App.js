@@ -23,6 +23,11 @@ import { FavPost } from './views/profile/FavPost';
 import { EditProfile } from './views/profile/EditProfile';
 import { SearchPost } from './views/SearchPost';
 import { Chat } from './views/chat/Chat';
+import LayoutAdmin from './components/LayoutAdmin';
+import Post from './views/admin/Post';
+import Users from './views/admin/Users';
+import Reports from './views/admin/Reports';
+import Receipts from './views/admin/Receipts';
 
 const App = () => {
     return (
@@ -56,15 +61,20 @@ const App = () => {
                         <Route path="chat/:chatId" element={<Chat />} />
                     </Route>
                 </Route>
-                <Route
-                    element={
-                        <RequireAuth
-                            allowedRoles={[ROLES.admin]}
-                            navigate="404"
-                        />
-                    }
-                >
-                    <Route path="admin" element={<BoardAdmin />} />
+                <Route path="/admin" element={<LayoutAdmin />}>
+                    <Route
+                        element={
+                            <RequireAuth
+                                allowedRoles={[ROLES.admin]}
+                                navigate="404"
+                            />
+                        }
+                    >
+                        <Route path="posts" element={<Post />} />
+                        <Route path="users" element={<Users />} />
+                        <Route path="receipts" element={<Reports />} />
+                        <Route path="reports" element={<Receipts />} />
+                    </Route>
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

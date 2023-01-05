@@ -209,3 +209,98 @@ label {
     right: 54px;
     z-index: 10000;
 }
+
+.admin{
+    display: flex;
+}
+
+.sidebar{
+    background-color: #3498DB;
+    color: #FFFFFF;
+    width: 15%;
+    min-width: 200px;
+    height: 100vh;
+}
+
+.sidebar__header{
+    padding: 30px;
+    display: flex !important;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.sidebar__header h4, .sidebar__item span{
+    margin-left: 16px;
+}
+
+.sidebar__items{
+    padding-left: 0;
+    cursor: pointer;
+}
+
+.sidebar__item{
+    list-style: none;
+    padding: 14px 32px;
+}
+
+.sidebar__item.active{
+    background-color: #2980B9;
+    border-left: 4px solid #FFFFFF;
+}
+
+.header__admin{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.header__admin > div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header__admin img{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 999px;
+    margin-left: 10px;
+}
+
+.admin__fullname{
+    font-weight: 500;
+}
+
+.admin__search input{
+    outline: none;
+    border: 0;
+    margin-right: 10px;
+    border-radius: 10px;
+    padding: 4px 16px;
+    width: 400px;
+}
+
+.css-advny6-MuiPopper-root.MuiPopperUnstyled-root{
+    z-index: 2;
+}
+
+.admin__status{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.admin__status .content{
+    background-color: #2ECC71;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: #fff;
+}
+
+.admin__status .content .warning{
+    background-color: #F1C40F;
+}
+
+.admin__status .content .block{
+    background-color: #E74C3C;
+}
