@@ -39,7 +39,11 @@ const Home = () => {
                     {TREND_IMG.map((img) => {
                         return (
                             <div className="col-sm" key={img.src}>
-                                <TrendImg src={img.src} label={img.label} />
+                                <TrendImg
+                                    src={img.src}
+                                    label={img.label}
+                                    to={img.to}
+                                />
                             </div>
                         );
                     })}

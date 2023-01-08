@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { useNavigate } from 'react-router-dom';
+import { generateAddressPositionAPI } from '../utilities/utils';
+import { useDispatch } from 'react-redux';
+import { showMessage } from '../slices/message';
 
 const SearchContainer = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -52,12 +55,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Search({ placeholder }) {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [text, setText] = useState('');
 
-    const handleKeypress = (e) => {
+    const handleKeypress = async (e) => {
         if (e.key === 'Enter') {
-            navigate('/search/1');
+            await generateAddressPositionAPI(e.target.value).then((res) => {
+                if (res)
+                    navigate(
+                        `/search/1/${res.latitude}/${res.longitude}/${e.target.value}`
+                    );
+                else
+                    dispatch(
+                        showMessage({
+                            message: 'Không tìm thấy kết quả',
+                            severity: 'error',
+                        })
+                    );
+            });
             setText('');
         }
     };

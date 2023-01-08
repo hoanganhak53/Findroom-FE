@@ -37,6 +37,10 @@ const App = () => {
                     <Route path="home" element={<Home />} />
                     <Route path="room/:roomId" element={<PostDetail />} />
                     <Route path="search/:page" element={<SearchPost />} />
+                    <Route
+                        path="search/:page/:lat/:lng/:keywords"
+                        element={<SearchPost />}
+                    />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
                     <Route

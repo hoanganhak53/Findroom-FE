@@ -20,7 +20,7 @@ import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Radio, RadioGroup } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchPostSlice } from '../slices/post';
 import { PostList } from '../components/PostList';
@@ -45,19 +45,20 @@ function priceText(value) {
 }
 
 export const SearchPost = () => {
-    const { page: currentPage } = useParams();
+    const { page: currentPage, lat, lng, keywords } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isLoading = useSelector((state) => state.post.isLoading);
     const [postPagination, setPostPagination] = React.useState([]);
-    const [totalPost, setTotalPost] = React.useState(10);
+    const [totalPost, setTotalPost] = React.useState(0);
     const [price, setPrice] = React.useState([0, 30]);
     const [utilities, setUtilities] = React.useState([]);
     const [room_type, setRoomType] = React.useState([]);
     const [room_gender, setRoomGender] = React.useState([]);
+    const [max_distance, setMaxDistance] = React.useState(3000);
 
     const handleChangePage = (event, page) => {
-        navigate(`/search/${page}`);
+        navigate(`/search/${page}${lat ? `/${lat}/${lng}/${keywords}` : ''}`);
         search(page, false);
     };
 
@@ -93,28 +94,26 @@ export const SearchPost = () => {
     const search = (currentPage, newSearch) => {
         let page = currentPage;
         if (newSearch) {
-            navigate(`/search/1`);
+            navigate(`/search/1${lat ? `/${lat}/${lng}/${keywords}` : ''}`);
             page = 1;
         }
 
         const body = {
-            // search: {
-            //     location: {
-            //         lng: 21.005017,
-            //         lat: 105.845666,
-            //         max_distance: 10000,
-            //     },
-            //     // query: {
-            //     //     room_location_district: 765,
-            //     //     room_location: 'HN',
-            //     // },
-            // },
             filter: {},
         };
         body.filter.price = {
             from: price[0] * 500000,
             to: price[1] * 500000,
         };
+        if (lat) {
+            body.search = {
+                location: {
+                    lat,
+                    lng,
+                    max_distance,
+                },
+            };
+        }
         if (room_type.length) {
             body.filter.room_type = [...room_type];
         }
@@ -142,10 +141,19 @@ export const SearchPost = () => {
 
     React.useEffect(() => {
         let unsub = false;
-
+        const body = {};
+        if (lat) {
+            body.search = {
+                location: {
+                    lat,
+                    lng,
+                    max_distance,
+                },
+            };
+        }
         dispatch(
             searchPostSlice({
-                body: {},
+                body,
                 page: currentPage,
             })
         )
@@ -164,7 +172,7 @@ export const SearchPost = () => {
             unsub = true;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [keywords]);
 
     return (
         <React.Fragment>
@@ -386,16 +394,49 @@ export const SearchPost = () => {
                         </FormGroup>
                     </AccordionDetails>
                 </Accordion>
-                {/* <Accordion>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>Vị trí</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>Vị trí</AccordionDetails>
-                </Accordion> */}
+                {lat && (
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography>Khoảng cách</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <RadioGroup
+                                defaultValue="3000"
+                                name="radio-buttons-group"
+                                onChange={(e) => {
+                                    setMaxDistance(Number(e.target.value));
+                                }}
+                                row
+                            >
+                                <FormControlLabel
+                                    value="1000"
+                                    control={<Radio />}
+                                    label="1 Kilomet"
+                                />
+                                <FormControlLabel
+                                    value="3000"
+                                    control={<Radio />}
+                                    label="3 Kilomet"
+                                />
+                                <FormControlLabel
+                                    value="5000"
+                                    control={<Radio />}
+                                    label="5 Kilomet"
+                                />
+                                <FormControlLabel
+                                    value="10000"
+                                    control={<Radio />}
+                                    label="10 Kilomet"
+                                />
+                            </RadioGroup>
+                        </AccordionDetails>
+                    </Accordion>
+                )}
             </div>
             <div className="m-card">
                 <h4 className="font-weight-bold">
                     Kết quả - {totalPost} bài viết
+                    {keywords && <span> tại {keywords}</span>}
                 </h4>
                 <br />
                 {isLoading && <CircularProgress />}
