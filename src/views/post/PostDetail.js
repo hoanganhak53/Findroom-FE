@@ -69,26 +69,34 @@ export const PostDetail = () => {
                         name={room?.room_name}
                         room_id={room?._id}
                         is_fav={room?.is_favorite_room}
+                        email={room?.owner_info?.email}
                     />
                     <PostInfor room={room} />
                     <PostFacility room={room} />
                     <PostDesc desc={room.notes} />
-                    {room?.owner_info?.email !== currentUser.email && (
-                        <div className="message-box">
-                            <Tooltip
-                                title="Nhắn tin với chủ nhà"
-                                placement="left"
-                            >
-                                <IconButton color="primary" onClick={openChat}>
-                                    <Avatar
-                                        src="https://cdn.tgdd.vn/2020/03/GameApp/unnamed-200x200-2.png"
-                                        sx={{ width: '60px', height: '60px' }}
-                                        className="shadow-lg"
-                                    />
-                                </IconButton>
-                            </Tooltip>
-                        </div>
-                    )}
+                    {currentUser &&
+                        room?.owner_info?.email !== currentUser.email && (
+                            <div className="message-box">
+                                <Tooltip
+                                    title="Nhắn tin với chủ nhà"
+                                    placement="left"
+                                >
+                                    <IconButton
+                                        color="primary"
+                                        onClick={openChat}
+                                    >
+                                        <Avatar
+                                            src="https://cdn.tgdd.vn/2020/03/GameApp/unnamed-200x200-2.png"
+                                            sx={{
+                                                width: '60px',
+                                                height: '60px',
+                                            }}
+                                            className="shadow-lg"
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
+                        )}
                 </Fragment>
             ) : (
                 <div className="justify-content-center d-flex mt-5">

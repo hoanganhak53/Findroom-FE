@@ -15,23 +15,33 @@ export const NavBar = ({ setAvt }) => {
     const [ownerEmail, setOwnerEmail] = useState({});
 
     useEffect(() => {
-        const unsub = async () => {
+        let unsub = false;
+
+        const getUser = async () => {
             const docRef = doc(firestore, 'conversation', chatId);
             const docSnap = await getDoc(docRef);
-            dispatch(
-                listUserByEmail([
-                    docSnap
-                        .data()
-                        .full_email.filter((e) => e !== currentUser.email)[0],
-                ])
-            )
-                .unwrap()
-                .then((res) => {
-                    setOwnerEmail(res?.data.result[0]);
-                    setAvt(res?.data.result[0].avatar_url);
-                });
+            if (!unsub) {
+                dispatch(
+                    listUserByEmail([
+                        docSnap
+                            .data()
+                            .full_email.filter(
+                                (e) => e !== currentUser.email
+                            )[0],
+                    ])
+                )
+                    .unwrap()
+                    .then((res) => {
+                        setOwnerEmail(res?.data.result[0]);
+                        setAvt(res?.data.result[0].avatar_url);
+                    });
+            }
         };
-        unsub();
+        getUser();
+
+        return () => {
+            unsub = true;
+        };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatId]);

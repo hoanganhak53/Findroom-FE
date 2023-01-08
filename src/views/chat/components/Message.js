@@ -1,4 +1,4 @@
-import { Avatar, Tooltip } from '@mui/material';
+import { Avatar } from '@mui/material';
 import {
     collection,
     limit,
@@ -9,17 +9,8 @@ import {
 } from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { convertTimeMessage } from '../../../utilities/convert';
 import { firestore } from '../firebase/firebase';
-
-function linkify(text) {
-    /* eslint-disable no-useless-escape */
-    const urlRegex =
-        /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
-    return text.replace(urlRegex, function (url) {
-        return '<a href="' + url + '" target="_blank">' + url + '</a>';
-    });
-}
+import { RenderMessage } from './RenderMessage';
 
 export const Message = ({ converstationId, targetAvt }) => {
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -46,7 +37,7 @@ export const Message = ({ converstationId, targetAvt }) => {
 
     useEffect(() => {
         setListMessage(snapShot?.docs?.reverse());
-        dummy.current.scrollIntoView({ behavior: 'smooth' });
+        // dummy.current.scrollIntoView({ behavior: 'smooth' });
     }, [snapShot]);
 
     useEffect(() => {
@@ -101,35 +92,10 @@ export const Message = ({ converstationId, targetAvt }) => {
                                     src={targetAvt}
                                 />
                             )}
-                            <Tooltip
-                                title={convertTimeMessage(
-                                    e.data()?.created_at?.seconds
-                                )}
-                                placement="left"
-                            >
-                                {e.data()?.img_url ? (
-                                    <img
-                                        src={e.data()?.img_url}
-                                        alt="attach_img"
-                                        className={`m-mess-img ${
-                                            e.data()?.sender === currentUser.id
-                                                ? 'owner'
-                                                : ''
-                                        }`}
-                                    />
-                                ) : (
-                                    <div
-                                        className={`m-mess ${
-                                            e.data()?.sender === currentUser.id
-                                                ? 'owner'
-                                                : ''
-                                        }`}
-                                        dangerouslySetInnerHTML={{
-                                            __html: linkify(e.data()?.content),
-                                        }}
-                                    />
-                                )}
-                            </Tooltip>
+                            <RenderMessage
+                                message={e.data()}
+                                currentUser={currentUser}
+                            />
                         </div>
                     ))}
                 <div ref={dummy}></div>

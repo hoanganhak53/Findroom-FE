@@ -11,7 +11,6 @@ import Login from './views/Login';
 import Register from './views/Register';
 import Home from './views/Home';
 import Profile from './views/profile/Profile';
-import BoardAdmin from './views/BoardAdmin';
 import NotFound from './views/NotFound';
 import Layout from './components/Layout';
 import { ROLES } from './constants/roles';

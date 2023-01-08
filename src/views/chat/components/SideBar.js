@@ -31,6 +31,7 @@ export const SideBar = () => {
     }, [currentUser.email]);
 
     useEffect(() => {
+        let unsub = false;
         if (snapshot) {
             const body = [];
             const arr = [];
@@ -41,20 +42,28 @@ export const SideBar = () => {
                     email: getEmail(e),
                 });
             });
-
-            dispatch(listUserByEmail(body))
-                .unwrap()
-                .then((res) => {
-                    arr.forEach((e) => {
-                        e.user = res?.data?.result.filter(
-                            (u) => u.email === e.email
-                        )[0];
+            if (!unsub) {
+                dispatch(listUserByEmail(body))
+                    .unwrap()
+                    .then((res) => {
+                        if (!unsub) {
+                            arr.forEach((e) => {
+                                e.user = res?.data?.result.filter(
+                                    (u) => u.email === e.email
+                                )[0];
+                            });
+                            setUserChats(arr);
+                        }
                     });
-                    setUserChats(arr);
-                });
+            }
         }
+
+        return () => {
+            unsub = true;
+        };
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [snapshot]);
+    }, [snapshot, dispatch]);
 
     const getEmail = (snap) => {
         return snap.data().full_email.filter((e) => e !== currentUser.email)[0];
@@ -133,9 +142,9 @@ export const SideBar = () => {
                                     ? e?.user.full_name
                                     : e?.user.username}
                             </span>
-                            <small className="text-muted overflow-hidden text-truncate">
+                            {/* <small className="text-muted overflow-hidden text-truncate">
                                 dmm
-                            </small>
+                            </small> */}
                         </div>
                     </div>
                 ))}

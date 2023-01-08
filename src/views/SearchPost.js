@@ -99,8 +99,15 @@ export const SearchPost = () => {
 
         const body = {
             // search: {
-            //     location: {},
-            //     query: {},
+            //     location: {
+            //         lng: 21.005017,
+            //         lat: 105.845666,
+            //         max_distance: 10000,
+            //     },
+            //     // query: {
+            //     //     room_location_district: 765,
+            //     //     room_location: 'HN',
+            //     // },
             // },
             filter: {},
         };
@@ -134,6 +141,8 @@ export const SearchPost = () => {
     };
 
     React.useEffect(() => {
+        let unsub = false;
+
         dispatch(
             searchPostSlice({
                 body: {},
@@ -142,13 +151,18 @@ export const SearchPost = () => {
         )
             .unwrap()
             .then((res) => {
-                setPostPagination(res.data.result);
-                setTotalPost(res.data.total);
+                if (!unsub) {
+                    setPostPagination(res.data.result);
+                    setTotalPost(res.data.total);
+                }
             })
             .catch((error) => {
                 console.error(error);
             });
 
+        return () => {
+            unsub = true;
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
