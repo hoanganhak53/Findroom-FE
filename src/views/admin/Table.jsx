@@ -25,6 +25,8 @@ import MenuListComposition, { MenuListCompositionUsers } from './Menu';
 import Status, { StatusUsers } from './Status';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
+import * as moment from 'moment'
+import { ROOM_TYPE } from '../../constants/roomType';
 
 function createData(name, calories, fat, carbs, protein) {
   return {
@@ -179,13 +181,11 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({title, headCells, rows=[]}) {
+export default function EnhancedTable({title, headCells, rows=[], setPage, page, setRowsPerPage, rowsPerPage, total}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -281,14 +281,14 @@ export default function EnhancedTable({title, headCells, rows=[]}) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      // onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
-                      aria-checked={isItemSelected}
+                      // aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
-                      selected={isItemSelected}
+                      // selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      {/* <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -296,23 +296,27 @@ export default function EnhancedTable({title, headCells, rows=[]}) {
                             'aria-labelledby': labelId,
                           }}
                         />
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         // padding="none"
                       >
-                        {row.name}
+                        <Stack direction="row" spacing={1} style={{display:'flex'}}>
+                          <Avatar alt="avatar" src={row.owner_info.avatar_url} />
+                          <b>{row.owner_info.full_name}</b>
+                        </Stack>
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
+                      <TableCell align="left">{row.room_name}</TableCell>
+                      <TableCell align="left">{moment.monthsShort()[+moment(row.created_date).format('MM') - 1] + ' ' + moment(row.created_date).format('DD, YYYY')}</TableCell>
+                      <TableCell align="left">{ROOM_TYPE[row.room_type]}</TableCell>
+                      <TableCell align="right">{0}</TableCell>
                       <TableCell align="right">
                         <Status/>
                       </TableCell>
                       <TableCell align="right">
-                        <MenuListComposition/>
+                        <MenuListComposition item={row}/>
                       </TableCell>
                     </TableRow>
                   );

@@ -22,10 +22,12 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import adminService from '../../services/admin.service';
 import MyLoading from './Modal';
+import { useNavigate } from 'react-router-dom';
 
-export default function MenuListComposition() {
+export default function MenuListComposition({item}) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
+  const navigate = useNavigate()
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -38,6 +40,11 @@ export default function MenuListComposition() {
 
     setOpen(false);
   };
+
+  const handleViewRoom = () => {
+    setOpen(false)
+    navigate('/room/' + item._id)
+  }
 
   function handleListKeyDown(event) {
     if (event.key === 'Tab') {
@@ -95,7 +102,7 @@ export default function MenuListComposition() {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={handleViewRoom}>
                         <RemoveRedEyeIcon style={{color:'#3498DB', marginRight:'8px'}}/> Xem chi tiết
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
