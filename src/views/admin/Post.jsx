@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import EnhancedTable from './Table'
 import MenuListComposition from './Menu';
+import adminService from '../../services/admin.service';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,26 +46,32 @@ const headCells = [
   {
     id: 'name',
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: 'Người đăng',
   },
   {
-    id: 'title',
-    numeric: true,
+    id: 'room_name',
+    numeric: false,
     disablePadding: false,
     label: 'Tiêu đề',
   },
   {
     id: 'created_at',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Ngày tạo',
   },
   {
-    id: 'type_room',
-    numeric: true,
+    id: 'room_type',
+    numeric: false,
     disablePadding: false,
     label: 'Kiểu phòng',
+  },
+  {
+    id: 'number_report',
+    numeric: true,
+    disablePadding: false,
+    label: 'Số lần báo cáo',
   },
   {
     id: 'status',
@@ -85,7 +92,43 @@ const Post = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [pageReport, setPageReport] =  React.useState(0)
+  const [limitReport, setLimitReport] =  React.useState(10)
+  const [totalReport, setTotalReport] =  React.useState(0)
+  const [report, setReport] = React.useState([])
+
+  const [pagePending, setPagePending] =  React.useState(0)
+  const [limitPending, setLimitPending] =  React.useState(10)
+  const [totalPending, setTotalPending] =  React.useState(0)
+  const [pending, setPending] = React.useState([])
   
+  React.useEffect(()=>{
+    const callApi = async () => {
+      try {
+        const res = await adminService.getPendingRoom(pagePending, limitPending)
+        setPending(res.data.result)
+        setTotalPending(res.data.total)
+      } catch (error) {
+        console.log("error", error)
+      }
+    }
+    callApi()
+  }, [pagePending, limitPending])
+
+  React.useEffect(()=>{
+    const callApi = async () => {
+      try {
+        const res = await adminService.getReportRoom(pageReport, limitReport)
+        setReport(res.data.result)
+        setTotalReport(res.data.total)
+      } catch (error) {
+        console.log("error", error)
+      }
+    }
+    callApi()
+  }, [pageReport, limitReport])
+
   return (
     <div className='admin__post'>
       <Header title={'Bài đăng phòng'} />
@@ -96,7 +139,16 @@ const Post = () => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <EnhancedTable title={'Tất cả bài đăng'} headCells={headCells}/>
+        <EnhancedTable 
+          title={'Tất cả bài đăng'} 
+          headCells={headCells}
+          rows={pending} 
+          setRowsPerPage={setLimitPending} 
+          rowsPerPage={limitPending} 
+          setPage={setPagePending} 
+          page={pagePending}
+          total={totalPending}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <MenuListComposition/>

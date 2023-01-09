@@ -24,12 +24,34 @@ const DeleteUser = (userId) => {
     return axiosInstance.delete(API_URL + 'admin/user/delete/' +  userId);
 };
 
+const getReportRoom = (page, limit, offset) => {
+    return axiosInstance.post(API_URL + 'admin/room/report', {
+        params: {
+            page,
+            page_size: limit,
+            offset
+        }
+    });
+};
+
+const getPendingRoom = (page, limit, offset) => {
+    return axiosInstance.post(API_URL + 'admin/room/pending-room', {
+        params: {
+            page,
+            page_size: limit,
+            offset
+        }
+    });
+};
+
 
 const adminService = {
     getUsersAdmin,
     UnlockUser,
     LockUser,
-    DeleteUser
+    DeleteUser,
+    getReportRoom,
+    getPendingRoom
 };
 
 export default adminService;
