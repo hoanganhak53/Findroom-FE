@@ -47,14 +47,33 @@ export const PostList = ({ posts, showControl = false, deletePost }) => {
                                 onClick={() => navigate(`/room/${e._id}`)}
                             />
                             <div className="d-flex flex-column justify-content-between pl-3 pb-2 col-9">
-                                <div className="d-flex justify-content-between">
-                                    <h5
-                                        onClick={() =>
-                                            navigate(`/room/${e._id}`)
-                                        }
-                                    >
-                                        {e?.room_name}
-                                    </h5>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="d-flex  align-items-center">
+                                        <h5
+                                            onClick={() =>
+                                                navigate(`/room/${e._id}`)
+                                            }
+                                        >
+                                            {e?.room_name}
+                                        </h5>
+                                        {showControl && (
+                                            <div className="ml-1">
+                                                <div className="admin__status">
+                                                    <span
+                                                        className={`content ${
+                                                            e?.pending
+                                                                ? 'warning'
+                                                                : ''
+                                                        }`}
+                                                    >
+                                                        {e?.pending
+                                                            ? 'PENDING'
+                                                            : 'ACTIVE'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                     {showControl && (
                                         <Fragment>
                                             <IconButton

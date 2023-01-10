@@ -52,8 +52,11 @@ const App = () => {
                         }
                     >
                         <Route path="profile" element={<Profile />}>
-                            <Route path="" element={<PersonalPost />} />
-                            <Route path="favorite" element={<FavPost />} />
+                            <Route path=":page" element={<PersonalPost />} />
+                            <Route
+                                path="favorite/:page"
+                                element={<FavPost />}
+                            />
                         </Route>
                         <Route path="edit-profile" element={<EditProfile />} />
                         <Route path="create-post" element={<CreatePost />} />

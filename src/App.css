@@ -295,12 +295,13 @@ label {
     padding: 4px 8px;
     border-radius: 999px;
     color: #fff;
+    font-size: smaller;
 }
 
-.admin__status .content .warning{
+.admin__status .content.warning{
     background-color: #F1C40F;
 }
 
-.admin__status .content .block{
+.admin__status .content.block{
     background-color: #E74C3C;
 }

@@ -31,7 +31,10 @@ import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import SecurityIcon from '@mui/icons-material/Security';
 import { useNavigate } from 'react-router-dom';
 // import { useParams } from 'react-router-dom';
-import { generateAddressCode, generateAddressGoogleApis } from '../utilities/utils';
+import {
+    generateAddressCode,
+    generateAddressGoogleApis,
+} from '../utilities/utils';
 
 const MIN_IMG = 4;
 const ROOM_TYPE = {
@@ -40,7 +43,7 @@ const ROOM_TYPE = {
     HOUSE: 'House',
     APARTMENT: 'Apartment',
     DORMITORY: 'Dormitory',
-}
+};
 
 const CreatePost = () => {
     // const { roomId } = useParams();
@@ -54,26 +57,26 @@ const CreatePost = () => {
     const dispatch = useDispatch();
 
     const handleInputBody = (e) => {
-        const attribute = e.target.dataset?.body
-        const value = e.target.value
+        const attribute = e.target.dataset?.body;
+        const value = e.target.value;
         if (attribute) {
-            setBody(prev => {
-                prev[attribute] = (value === '' || isNaN(value)) ? value : +value
-                return prev
-            })
+            setBody((prev) => {
+                prev[attribute] = value === '' || isNaN(value) ? value : +value;
+                return prev;
+            });
         }
         console.log(body);
     };
 
     const handleClickTI = (item) => {
         item.currentTarget.classList.toggle('active');
-        const attribute = item.currentTarget.dataset?.body
+        const attribute = item.currentTarget.dataset?.body;
         if (!attribute) return;
-        setBody(prev => {
-            prev[attribute] = !prev[attribute]
-            return prev
-        })
-        console.log(body)
+        setBody((prev) => {
+            prev[attribute] = !prev[attribute];
+            return prev;
+        });
+        console.log(body);
     };
 
     const cloudinaryRef = useRef();
@@ -106,23 +109,28 @@ const CreatePost = () => {
     }, [setListImg]);
 
     const handleSubmit = async () => {
-        const ggMapApis = await generateAddressGoogleApis(body.exact_room_address)
-        let geocoding_api = {}, full_address_object = {}
-        if(ggMapApis){
+        const ggMapApis = await generateAddressGoogleApis(
+            body.exact_room_address
+        );
+        let geocoding_api = {},
+            full_address_object = {};
+        if (ggMapApis) {
             geocoding_api = {
-               location: ggMapApis.geometry.location,
-               viewport: ggMapApis.geometry.viewport,
-               location_type: ggMapApis.geometry.location_type
-           }
+                location: ggMapApis.geometry.location,
+                viewport: ggMapApis.geometry.viewport,
+                location_type: ggMapApis.geometry.location_type,
+            };
 
-           full_address_object = await generateAddressCode(ggMapApis.address_components)
+            full_address_object = await generateAddressCode(
+                ggMapApis.address_components
+            );
         }
-        setBody(prev => ({
+        setBody((prev) => ({
             ...prev,
             ...geocoding_api,
             ...full_address_object,
             upload_room_images: listImg,
-        }))
+        }));
         try {
             await createPostSchema.validate(body);
         } catch (error) {
@@ -146,7 +154,7 @@ const CreatePost = () => {
             .catch(() => {
                 setLoading(false);
             });
-        navigate('/profile');
+        navigate('/profile/1');
     };
 
     return (
@@ -217,8 +225,8 @@ const CreatePost = () => {
                             type="text"
                             className="input__input input__input--row"
                             placeholder="3 nam hoặc 2 nữ"
-                        // data-body="room_area"
-                        // onChange={handleInputBody}
+                            // data-body="room_area"
+                            // onChange={handleInputBody}
                         />
                     </div>
                 </div>
@@ -240,7 +248,12 @@ const CreatePost = () => {
                         row
                         aria-labelledby="radio__group"
                         name="radio__group"
-                        onChange={(e)=>setBody(prev => ({...prev, room_type: e.target.value}))}
+                        onChange={(e) =>
+                            setBody((prev) => ({
+                                ...prev,
+                                room_type: e.target.value,
+                            }))
+                        }
                     >
                         <FormControlLabel
                             value={ROOM_TYPE.SHARED}

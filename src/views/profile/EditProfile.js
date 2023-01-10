@@ -103,7 +103,7 @@ export const EditProfile = () => {
                         severity: 'success',
                     })
                 );
-                navigate('/profile');
+                navigate('/profile/1');
             })
             .catch(() => {
                 setLoading(false);

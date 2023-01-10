@@ -135,7 +135,7 @@ export const NavBar = () => {
                                 </span>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item href="/profile">
+                                <Dropdown.Item href="/profile/1">
                                     <PersonIcon color="primary" /> Thông tin cá
                                     nhân
                                 </Dropdown.Item>

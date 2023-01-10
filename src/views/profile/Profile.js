@@ -68,7 +68,7 @@ const Profile = () => {
                         'btn mr-2 ' +
                         (isActiveButton ? 'btn-outline-primary' : 'btn-primary')
                     }
-                    onClick={() => switchListPost('/profile', true)}
+                    onClick={() => switchListPost('/profile/1', true)}
                 >
                     Bài đăng cá nhân
                 </button>
@@ -77,7 +77,7 @@ const Profile = () => {
                         'btn ' +
                         (isActiveButton ? 'btn-primary' : 'btn-outline-primary')
                     }
-                    onClick={() => switchListPost('favorite', false)}
+                    onClick={() => switchListPost('favorite/1', false)}
                 >
                     Bài đăng yêu thích
                 </button>

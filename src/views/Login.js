@@ -31,7 +31,7 @@ const Login = () => {
         await dispatch(login({ username, password }))
             .unwrap()
             .then(async () => {
-                navigate('/profile');
+                navigate('/profile/1');
                 window.location.reload();
             })
             .catch(() => {
@@ -40,7 +40,7 @@ const Login = () => {
     };
 
     if (isLoggedIn) {
-        return <Navigate to="/profile" />;
+        return <Navigate to="/profile/1" />;
     }
 
     return (

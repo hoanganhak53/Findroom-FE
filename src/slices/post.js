@@ -118,9 +118,12 @@ export const addFavSilce = createAsyncThunk(
 
 export const allPersonalPost = createAsyncThunk(
     'room/personal',
-    async (body, thunkAPI) => {
+    async (value, thunkAPI) => {
         try {
-            return await postService.getAllPersonlRoom(body);
+            return await postService.getAllPersonlRoom(
+                value?.body,
+                value?.page
+            );
         } catch (error) {
             const message =
                 (error.response &&

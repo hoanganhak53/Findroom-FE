@@ -28,8 +28,11 @@ const postReportRoom = (body) => {
     return axiosInstance.post(API_URL + `report-room/add`, body);
 };
 
-const getAllFavRoom = (body) => {
-    return axiosInstance.post(API_URL + `favorite-room/all`, body);
+const getAllFavRoom = (page) => {
+    return axiosInstance.post(
+        API_URL +
+            `favorite-room/all?page=${page}&page_size=10&sort=created_date,desc`
+    );
 };
 
 const deleteFavRoom = (body) => {
@@ -40,8 +43,12 @@ const addFavRoom = (body) => {
     return axiosInstance.post(API_URL + `favorite-room/add`, body);
 };
 
-const getAllPersonlRoom = (body) => {
-    return axiosInstance.post(API_URL + `room/personal-room`, body);
+const getAllPersonlRoom = (body, page) => {
+    return axiosInstance.post(
+        API_URL +
+            `room/personal-room?page=${page}&page_size=10&sort=created_date,desc`,
+        body
+    );
 };
 
 const postService = {
