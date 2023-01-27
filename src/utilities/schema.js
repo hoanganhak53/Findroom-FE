@@ -116,4 +116,7 @@ export const createPostSchema = Yup.object({
     water_price: Yup.number()
         .typeError('Tiền nước phải là số!')
         .required('Tiền nước là trường bắt buộc!'),
+    upload_room_images: Yup.array()
+        .min(4, 'Phải tải lên tối thiểu 4 ảnh')
+        .required('Ảnh phòng là trường bắt buộc!'),
 });

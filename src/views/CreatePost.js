@@ -114,32 +114,40 @@ const CreatePost = () => {
         );
         let geocoding_api = {},
             full_address_object = {};
-        if (ggMapApis) {
+
+        if (ggMapApis?.length) {
             geocoding_api = {
-                location: ggMapApis.geometry.location,
-                viewport: ggMapApis.geometry.viewport,
-                location_type: ggMapApis.geometry.location_type,
+                location: ggMapApis[0]?.geometry?.location,
+                viewport: ggMapApis[0]?.geometry?.viewport,
+                location_type: ggMapApis[0]?.geometry?.location_type,
             };
 
             full_address_object = await generateAddressCode(
-                ggMapApis.address_components
+                ggMapApis[0].address_components
             );
         }
-        setBody((prev) => ({
-            ...prev,
-            ...geocoding_api,
-            ...full_address_object,
-            upload_room_images: listImg,
-        }));
+
         try {
-            await createPostSchema.validate(body);
+            await createPostSchema.validate({
+                ...body,
+                ...geocoding_api,
+                ...full_address_object,
+                upload_room_images: listImg,
+            });
         } catch (error) {
             setShow(true);
             setContentValidate(error.message);
             return false;
         }
         setLoading(true);
-        dispatch(createPostSlice(body))
+        dispatch(
+            createPostSlice({
+                ...body,
+                ...geocoding_api,
+                ...full_address_object,
+                upload_room_images: listImg,
+            })
+        )
             .unwrap()
             .then((e) => {
                 console.log('first', e);
