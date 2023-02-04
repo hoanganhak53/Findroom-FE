@@ -27,6 +27,9 @@ import { useNavigate } from 'react-router-dom';
 export default function MenuListComposition({item}) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
+  const [openUnlock, setOpenUnlock] = React.useState(false);
+  const [promise, setPromise] = React.useState(false);
+  const [title, setTitle] = React.useState('')
   const navigate = useNavigate()
 
   const handleToggle = () => {
@@ -44,6 +47,13 @@ export default function MenuListComposition({item}) {
   const handleViewRoom = () => {
     setOpen(false)
     navigate('/room/' + item._id)
+  }
+
+  const handleCensorRoom = () => {
+    setTitle('Duyệt bài viết')
+    setOpen(false)
+    setOpenUnlock(true)
+    setPromise(adminService.SensorRoom(item._id))
   }
 
   function handleListKeyDown(event) {
@@ -105,7 +115,7 @@ export default function MenuListComposition({item}) {
                     <MenuItem onClick={handleViewRoom}>
                         <RemoveRedEyeIcon style={{color:'#3498DB', marginRight:'8px'}}/> Xem chi tiết
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={handleCensorRoom}>
                         <AddCircleIcon style={{color:'#3498DB', marginRight:'8px'}}/> Duyệt bài viết
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
@@ -120,17 +130,24 @@ export default function MenuListComposition({item}) {
             </Grow>
           )}
         </Popper>
+        <MyLoading
+          open={openUnlock}
+          setOpen={setOpenUnlock}
+          title={title}
+          promise={promise}
+        />
       </div>
     </Stack>
   );
 }
 
-export function MenuListCompositionUsers({item}) {
+export function MenuListCompositionUsers({item, setRefresh, refresh}) {
     const [open, setOpen] = React.useState(false);
     const [currentUser, setCurrentUser] = React.useState(item);
     const [openPopupInfo, setOpenPopupInfo] = React.useState(false);
     const [openUnlock, setOpenUnlock] = React.useState(false);
     const [promise, setPromise] = React.useState(false);
+    const [title, setTitle] = React.useState('');
 
     const anchorRef = React.useRef(null);
   
@@ -158,18 +175,24 @@ export function MenuListCompositionUsers({item}) {
     const handleUnlockUser = () => {
       setOpen(false)
       setOpenUnlock(true)
+      setTitle('Mở khóa tài khoản')
+      setRefresh(!refresh)
       setPromise(adminService.UnlockUser(currentUser.id))
     }
 
     const handleLockUser = () => {
       setOpen(false)
       setOpenUnlock(true)
+      setTitle('Chặn tài khoản')
+      setRefresh(!refresh)
       setPromise(adminService.LockUser(currentUser.id))
     }
 
     const handleDeleteUser = () => {
       setOpen(false)
       setOpenUnlock(true)
+      setTitle('Xóa tài khoản')
+      setRefresh(!refresh)
       setPromise(adminService.DeleteUser(currentUser.id))
     }
   
@@ -299,7 +322,7 @@ export function MenuListCompositionUsers({item}) {
         <MyLoading
           open={openUnlock}
           setOpen={setOpenUnlock}
-          title={'Mở khóa tài khoản'}
+          title={title}
           promise={promise}
         />
       </Stack>
