@@ -14,8 +14,8 @@ export default function DelayingAppearance({promise}) {
         setMsg(data.data.message)
         setSuccess(true)
       }).catch(e => {
-        setMsg(e.message)
-        setError(false)
+        setMsg(e.response.data.error)
+        setError(true)
       })
     }
   }, [promise])

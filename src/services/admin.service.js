@@ -44,6 +44,9 @@ const getPendingRoom = (page, limit, offset) => {
     });
 };
 
+const SensorRoom = (id) => {
+    return axiosInstance.post(API_URL + 'admin/room/sensor/' + id);
+};
 
 const adminService = {
     getUsersAdmin,
@@ -51,7 +54,8 @@ const adminService = {
     LockUser,
     DeleteUser,
     getReportRoom,
-    getPendingRoom
+    getPendingRoom,
+    SensorRoom
 };
 
 export default adminService;

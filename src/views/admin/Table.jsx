@@ -351,7 +351,7 @@ export default function EnhancedTable({title, headCells, rows=[], setPage, page,
   );
 }
 
-export function EnhancedTableUsers({title, headCells, rows=[], setPage, page, setRowsPerPage, rowsPerPage, total}) {
+export function EnhancedTableUsers({title, headCells, rows=[], setPage, page, setRowsPerPage, rowsPerPage, total, setRefresh, refresh}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -480,14 +480,14 @@ export function EnhancedTableUsers({title, headCells, rows=[], setPage, page, se
                           <b>{row.username}</b>
                         </Stack>
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
+                      <TableCell align="right">{row.number_room}</TableCell>
+                      <TableCell align="right">{row.number_reported}</TableCell>
+                      <TableCell align="right">{moment.monthsShort()[+moment(row.created_at).format('MM') - 1] + ' ' + moment(row.created_at).format('DD, YYYY')}</TableCell>
                       <TableCell align="right">
                         <StatusUsers status={row.status}/>
                       </TableCell>
                       <TableCell align="right">
-                        <MenuListCompositionUsers item={row}/>
+                        <MenuListCompositionUsers item={row} setRefresh={setRefresh} refresh={refresh}/>
                       </TableCell>
                     </TableRow>
                   );

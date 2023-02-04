@@ -46,6 +46,7 @@ const Users = () => {
   const [limit, setLimit] =  React.useState(10)
   const [total, setTotal] =  React.useState(0)
   const [users, setUsers] = React.useState([])
+  const [refresh, setRefresh] = React.useState(false)
     React.useEffect(()=>{
       const callApi = async () => {
         try {
@@ -57,7 +58,7 @@ const Users = () => {
         }
       }
       callApi()
-    }, [page, limit])
+    }, [page, limit, refresh])
     return (
         <div className='admin__users'>
             <Header title={'Tài khoản khách hàng'} />
@@ -69,6 +70,8 @@ const Users = () => {
               setPage={setPage} 
               page={page}
               total={total}
+              setRefresh={setRefresh}
+              refresh={refresh}
             />
         </div>
     )

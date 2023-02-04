@@ -305,3 +305,16 @@ label {
 .admin__status .content.block{
     background-color: #E74C3C;
 }
+
+.admin .container{
+    height: 100vh;
+    overflow: auto;
+}
+
+.admin .container::-webkit-scrollbar{
+    width: 0;
+}
+
+.admin .mt-3, .my-3{
+    margin-top: 0rem!important;
+}

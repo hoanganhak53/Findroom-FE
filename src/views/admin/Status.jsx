@@ -15,7 +15,7 @@ const Status = ({status}) => {
 export default Status
 
 export const StatusUsers = ({status}) => {
-    if(!status){
+    if(status === 'active'){
         return (
             <div className='admin__status'>
                 <div className="content">
@@ -24,4 +24,20 @@ export const StatusUsers = ({status}) => {
             </div>
         )
     }
+    if(status === 'inactive'){
+        return (
+            <div className='admin__status'>
+                <div className="content warning">
+                    INACTIVE
+                </div>
+            </div>
+        )
+    }
+    return (
+        <div className='admin__status'>
+            <div className="content block">
+                Block
+            </div>
+        </div>
+    )
 }
