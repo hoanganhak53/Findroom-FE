@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import GroupsIcon from '@mui/icons-material/Groups';
 import GridViewIcon from '@mui/icons-material/GridView';
@@ -15,18 +15,19 @@ import EditIcon from '@mui/icons-material/Edit';
 
 export const PostList = ({ posts, showControl = false, deletePost }) => {
     const navigate = useNavigate();
-
+    const [targetId, setTargetId] = useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const handleClick = (event, id) => {
         setAnchorEl(event.currentTarget);
+        setTargetId(id);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const handleDelete = (postId) => {
-        deletePost(postId);
+    const handleDelete = () => {
+        deletePost(targetId);
         handleClose();
     };
 
@@ -68,7 +69,7 @@ export const PostList = ({ posts, showControl = false, deletePost }) => {
                                                     >
                                                         {e?.pending
                                                             ? 'PENDING'
-                                                            : 'ACTIVE'}
+                                                            : `ACTIVE`}
                                                     </span>
                                                 </div>
                                             </div>
@@ -78,17 +79,19 @@ export const PostList = ({ posts, showControl = false, deletePost }) => {
                                         <Fragment>
                                             <IconButton
                                                 aria-label="more"
-                                                id="long-button"
+                                                id={`long-button-${e._id}`}
                                                 aria-controls={
                                                     open
-                                                        ? 'long-menu'
+                                                        ? `long-menu-${e._id}`
                                                         : undefined
                                                 }
                                                 aria-expanded={
                                                     open ? 'true' : undefined
                                                 }
                                                 aria-haspopup="true"
-                                                onClick={handleClick}
+                                                onClick={(event) =>
+                                                    handleClick(event, e._id)
+                                                }
                                             >
                                                 <MoreVertIcon />
                                             </IconButton>
@@ -105,7 +108,7 @@ export const PostList = ({ posts, showControl = false, deletePost }) => {
                                             >
                                                 <MenuItem
                                                     onClick={() =>
-                                                        handleDelete(e._id)
+                                                        handleDelete()
                                                     }
                                                 >
                                                     <DeleteOutlineIcon /> Xóa
@@ -114,7 +117,7 @@ export const PostList = ({ posts, showControl = false, deletePost }) => {
                                                 <MenuItem
                                                     onClick={() =>
                                                         navigate(
-                                                            `/edit-post/${e._id}`
+                                                            `/edit-post/${targetId}`
                                                         )
                                                     }
                                                 >

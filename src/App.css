@@ -207,7 +207,7 @@ label {
     position: fixed;
     bottom: 54px;
     right: 54px;
-    z-index: 100;
+    z-index: 4;
 }
 
 .admin{

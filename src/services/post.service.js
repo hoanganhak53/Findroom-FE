@@ -51,6 +51,17 @@ const getAllPersonlRoom = (body, page) => {
     );
 };
 
+const updatePost = (body) => {
+    return axiosInstance.post(API_URL + `room/update`, body);
+};
+
+const ordersByMomo = (body, callback) => {
+    return axiosInstance.post(
+        API_URL + `orders/momo?callback_url=${callback}`,
+        body
+    );
+};
+
 const postService = {
     getPostPagination,
     getDetailPost,
@@ -60,6 +71,8 @@ const postService = {
     addFavRoom,
     getAllPersonlRoom,
     delPost,
+    updatePost,
+    ordersByMomo,
 };
 
 export default postService;

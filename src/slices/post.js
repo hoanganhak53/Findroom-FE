@@ -155,6 +155,42 @@ export const reportRoomSlice = createAsyncThunk(
     }
 );
 
+export const updatePostSlice = createAsyncThunk(
+    'room/update',
+    async (body, thunkAPI) => {
+        try {
+            return await postService.updatePost(body);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
+export const saveByMomo = createAsyncThunk(
+    'room/saveByMomo',
+    async (value, thunkAPI) => {
+        try {
+            return await postService.ordersByMomo(value.body, value.callback);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
 const initialState = {
     isLoading: false,
 };

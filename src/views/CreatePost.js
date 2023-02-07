@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+// import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
 // import WifiIcon from '@mui/icons-material/Wifi';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
@@ -21,7 +21,11 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import ImageGallery from 'react-image-gallery';
 import { useDispatch } from 'react-redux';
-import { createPostSlice } from '../slices/post';
+import {
+    createPostSlice,
+    detailPostSilce,
+    updatePostSlice,
+} from '../slices/post';
 import { showMessage } from '../slices/message';
 import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -30,7 +34,7 @@ import KitchenIcon from '@mui/icons-material/Kitchen';
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import SecurityIcon from '@mui/icons-material/Security';
 import { useNavigate } from 'react-router-dom';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
     generateAddressCode,
     generateAddressGoogleApis,
@@ -46,7 +50,7 @@ const ROOM_TYPE = {
 };
 
 const CreatePost = () => {
-    // const { roomId } = useParams();
+    const { roomId } = useParams();
     const navigate = useNavigate();
     const [body, setBody] = useState({});
     const [listImg, setListImg] = useState([]);
@@ -108,6 +112,75 @@ const CreatePost = () => {
         );
     }, [setListImg]);
 
+    useEffect(() => {
+        if (roomId) {
+            dispatch(detailPostSilce(roomId))
+                .unwrap()
+                .then((res) => {
+                    const room = res.data.result;
+                    const id = room._id;
+                    setListImg(room.upload_room_images);
+                    delete room.upload_room_images;
+                    delete room.owner_info;
+                    delete room._id;
+                    room.id = id;
+                    setBody(room);
+                    for (let key in room) {
+                        if (room[key] === true) {
+                            const item = document.querySelector(
+                                `[data-body=${key}]`
+                            );
+                            if (item) {
+                                item.classList.toggle('active');
+                            }
+                        }
+                    }
+                })
+                .catch(() => {
+                    navigate('/not-found');
+                });
+        } else {
+            setBody({});
+            setListImg([]);
+        }
+    }, [roomId, dispatch, navigate]);
+
+    const handleSubmitUpdate = async () => {
+        try {
+            await createPostSchema.validate({
+                ...body,
+                upload_room_images: listImg,
+            });
+        } catch (error) {
+            setShow(true);
+            setContentValidate(error.message);
+            return false;
+        }
+        setLoading(true);
+        dispatch(
+            updatePostSlice({
+                ...body,
+                upload_room_images: listImg,
+            })
+        )
+            .unwrap()
+            .then((e) => {
+                console.log('first', e);
+                dispatch(
+                    showMessage({
+                        message: 'Sửa bài đăng thành công!',
+                        severity: 'success',
+                    })
+                );
+                setLoading(false);
+            })
+            .catch(() => {
+                setLoading(false);
+            });
+
+        navigate(`/room/${roomId}`);
+    };
+
     const handleSubmit = async () => {
         const ggMapApis = await generateAddressGoogleApis(
             body.exact_room_address
@@ -140,6 +213,7 @@ const CreatePost = () => {
             return false;
         }
         setLoading(true);
+
         dispatch(
             createPostSlice({
                 ...body,
@@ -162,6 +236,7 @@ const CreatePost = () => {
             .catch(() => {
                 setLoading(false);
             });
+
         navigate('/profile/1');
     };
 
@@ -184,6 +259,7 @@ const CreatePost = () => {
                             placeholder="Tối đa 50 ký tự"
                             data-body="room_name"
                             onChange={handleInputBody}
+                            defaultValue={body.room_name}
                         />
                     </div>
                 </div>
@@ -197,6 +273,7 @@ const CreatePost = () => {
                                 placeholder="3,500,000"
                                 data-body="room_price"
                                 onChange={handleInputBody}
+                                defaultValue={body.room_price}
                             />
                             <span className="input__span">VNĐ/người</span>
                         </div>
@@ -210,6 +287,7 @@ const CreatePost = () => {
                                 placeholder="3,500,000"
                                 data-body="deposit"
                                 onChange={handleInputBody}
+                                defaultValue={body.deposit}
                             />
                             <span className="input__span">VNĐ/người</span>
                         </div>
@@ -223,11 +301,12 @@ const CreatePost = () => {
                                 placeholder="25"
                                 data-body="room_area"
                                 onChange={handleInputBody}
+                                defaultValue={body.room_area}
                             />
                             <span className="input__span">m2</span>
                         </div>
                     </div>
-                    <div className="box__input">
+                    {/* <div className="box__input">
                         <p className="input__name">Sức chứa</p>
                         <input
                             type="text"
@@ -236,7 +315,7 @@ const CreatePost = () => {
                             // data-body="room_area"
                             // onChange={handleInputBody}
                         />
-                    </div>
+                    </div> */}
                 </div>
                 <div className="box__box display--block">
                     <div className="box__input">
@@ -247,6 +326,7 @@ const CreatePost = () => {
                             placeholder="173 Đường Phạm Hùng, Phường Trung Hoà, Quận Cầu Giấy, Hà Nội"
                             data-body="exact_room_address"
                             onChange={handleInputBody}
+                            defaultValue={body.exact_room_address}
                         />
                     </div>
                 </div>
@@ -262,6 +342,7 @@ const CreatePost = () => {
                                 room_type: e.target.value,
                             }))
                         }
+                        defaultValue={ROOM_TYPE.SHARED}
                     >
                         <FormControlLabel
                             value={ROOM_TYPE.SHARED}
@@ -302,6 +383,7 @@ const CreatePost = () => {
                                 return prev;
                             })
                         }
+                        defaultValue="any"
                     >
                         <FormControlLabel
                             value="male"
@@ -330,6 +412,7 @@ const CreatePost = () => {
                                 placeholder="3,500"
                                 data-body="electric_price"
                                 onChange={handleInputBody}
+                                defaultValue={body.electric_price}
                             />
                             <span className="input__span">VNĐ/số</span>
                         </div>
@@ -343,6 +426,7 @@ const CreatePost = () => {
                                 placeholder="30,000"
                                 data-body="water_price"
                                 onChange={handleInputBody}
+                                defaultValue={body.water_price}
                             />
                             <span className="input__span">VNĐ/số</span>
                         </div>
@@ -357,10 +441,10 @@ const CreatePost = () => {
                     Tiện ích
                 </h3>
                 <div className="box__container">
-                    <div className="box__button" onClick={handleClickTI}>
+                    {/* <div className="box__button" onClick={handleClickTI}>
                         <AccessAlarmIcon />
                         <span className="button__name">Giờ giấc tự do</span>
-                    </div>
+                    </div> */}
                     <div
                         className="box__button"
                         onClick={handleClickTI}
@@ -478,6 +562,7 @@ const CreatePost = () => {
                         placeholder="Thêm ghi chú về phòng trọ"
                         data-body="notes"
                         onChange={handleInputBody}
+                        defaultValue={body.notes}
                     ></textarea>
                 </div>
             </div>
@@ -524,12 +609,12 @@ const CreatePost = () => {
                 <button
                     type="submit"
                     className="btn btn-primary"
-                    onClick={handleSubmit}
+                    onClick={roomId ? handleSubmitUpdate : handleSubmit}
                 >
                     {loading && (
                         <span className="spinner-border spinner-border-sm"></span>
                     )}
-                    <span>Đăng bài</span>
+                    <span>{roomId ? 'Cập nhật' : 'Đăng bài'}</span>
                 </button>
             </div>
             <Modal show={show} onHide={handleClose} centered>

@@ -64,13 +64,7 @@ export const PostDetail = () => {
         <Fragment>
             {room ? (
                 <Fragment>
-                    <PostImg
-                        images={room?.upload_room_images}
-                        name={room?.room_name}
-                        room_id={room?._id}
-                        is_fav={room?.is_favorite_room}
-                        email={room?.owner_info?.email}
-                    />
+                    <PostImg room={room} />
                     <PostInfor room={room} />
                     <PostFacility room={room} />
                     <PostDesc desc={room.notes} />

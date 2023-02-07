@@ -18,11 +18,12 @@ import {
     addFavSilce,
     deleteFavSilce,
     reportRoomSlice,
+    saveByMomo,
 } from '../../slices/post';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-
+import LocalMallIcon from '@mui/icons-material/LocalMall';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import {
@@ -43,7 +44,13 @@ const reasonList = [
     'Lý do khác',
 ];
 
-export const PostImg = ({ images, name, room_id, is_fav, email }) => {
+export const PostImg = ({ room }) => {
+    const images = room?.upload_room_images;
+    const name = room?.room_name;
+    const room_id = room?._id;
+    const is_fav = room?.is_favorite_room;
+    const email = room?.owner_info?.email;
+    const roles = room?.owner_info?.roles;
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const [is_fav_post, setFavPost] = useState(is_fav);
@@ -193,6 +200,24 @@ export const PostImg = ({ images, name, room_id, is_fav, email }) => {
         );
     };
 
+    const depositByMomo = () => {
+        dispatch(
+            saveByMomo({
+                body: {
+                    total: room.deposit,
+                    user_id: currentUser.id,
+                    room,
+                },
+                callback: `http://localhost:3000/room/${room_id}`,
+            })
+        )
+            .unwrap()
+            .then((res) => {
+                console.log(res.data.result);
+                window.open(res.data.result.payUrl, '_blank', 'noreferrer');
+            });
+    };
+
     return (
         <Fragment>
             <div className="m-card">
@@ -207,6 +232,14 @@ export const PostImg = ({ images, name, room_id, is_fav, email }) => {
                     <h5 className="font-weight-bold">&nbsp;{name}</h5>
                     {currentUser && email !== currentUser.email && (
                         <div className="d-flex">
+                            {roles !== null && roles.includes('ADMIN') && (
+                                <Tooltip placement="bottom" title="Đặt cọc">
+                                    <IconButton onClick={depositByMomo}>
+                                        <LocalMallIcon color="primary" />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+
                             <Tooltip placement="bottom" title="Đặt lịch hẹn">
                                 <IconButton
                                     onClick={() => setShowSchedule(true)}
