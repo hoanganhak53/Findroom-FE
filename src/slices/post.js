@@ -191,6 +191,24 @@ export const saveByMomo = createAsyncThunk(
     }
 );
 
+export const resultOrdersFromMomo = createAsyncThunk(
+    'momo/result',
+    async (params, thunkAPI) => {
+        try {
+            return await postService.updateResultOrders(params);
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
 const initialState = {
     isLoading: false,
 };

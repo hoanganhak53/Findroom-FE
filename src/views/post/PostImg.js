@@ -44,7 +44,7 @@ const reasonList = [
     'Lý do khác',
 ];
 
-export const PostImg = ({ room }) => {
+export const PostImg = ({ room, isShow, setShowOrder }) => {
     const images = room?.upload_room_images;
     const name = room?.room_name;
     const room_id = room?._id;
@@ -201,21 +201,24 @@ export const PostImg = ({ room }) => {
     };
 
     const depositByMomo = () => {
-        dispatch(
-            saveByMomo({
-                body: {
-                    total: room.deposit,
-                    user_id: currentUser.id,
-                    room,
-                },
-                callback: `http://localhost:3000/room/${room_id}`,
-            })
-        )
-            .unwrap()
-            .then((res) => {
-                console.log(res.data.result);
-                window.open(res.data.result.payUrl, '_blank', 'noreferrer');
-            });
+        if (isShow) {
+            setShowOrder(true);
+        } else {
+            dispatch(
+                saveByMomo({
+                    body: {
+                        total: room.deposit,
+                        user_id: currentUser.id,
+                        room,
+                    },
+                    callback: `http://localhost:3000/room/${room_id}`,
+                })
+            )
+                .unwrap()
+                .then((res) => {
+                    window.open(res.data.result.payUrl, '_blank', 'noreferrer');
+                });
+        }
     };
 
     return (

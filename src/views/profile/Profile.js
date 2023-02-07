@@ -1,5 +1,5 @@
 import { Avatar } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -10,16 +10,17 @@ const Profile = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
     const location = useLocation();
     const navigate = useNavigate();
-    const [isActiveButton, setActiveButton] = useState(
-        location.pathname.includes('favorite')
-    );
+    const [activeButton, setActiveButton] = useState('');
 
-    const switchListPost = (url, to) => {
-        if (isActiveButton === to) {
-            navigate(url);
-            setActiveButton(!isActiveButton);
-        }
+    const switchListPost = (url) => {
+        navigate(url);
     };
+
+    useEffect(() => {
+        const currentPage = location.pathname.split('/')[2];
+        setActiveButton(currentPage);
+    }, [location]);
+
     return (
         <div className="container">
             <div className="m-card d-flex">
@@ -66,20 +67,35 @@ const Profile = () => {
                 <button
                     className={
                         'btn mr-2 ' +
-                        (isActiveButton ? 'btn-outline-primary' : 'btn-primary')
+                        (isNaN(activeButton)
+                            ? 'btn-outline-primary'
+                            : 'btn-primary')
                     }
-                    onClick={() => switchListPost('/profile/1', true)}
+                    onClick={() => switchListPost('/profile/1')}
                 >
                     Bài đăng cá nhân
                 </button>
                 <button
                     className={
-                        'btn ' +
-                        (isActiveButton ? 'btn-primary' : 'btn-outline-primary')
+                        'btn mr-2 ' +
+                        (activeButton === 'favorite'
+                            ? 'btn-primary'
+                            : 'btn-outline-primary')
                     }
-                    onClick={() => switchListPost('favorite/1', false)}
+                    onClick={() => switchListPost('favorite/1')}
                 >
                     Bài đăng yêu thích
+                </button>
+                <button
+                    className={
+                        'btn ' +
+                        (activeButton === 'orders'
+                            ? 'btn-primary'
+                            : 'btn-outline-primary')
+                    }
+                    onClick={() => switchListPost('orders/1')}
+                >
+                    Hóa đơn
                 </button>
             </div>
             <Outlet />

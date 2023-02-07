@@ -62,6 +62,10 @@ const ordersByMomo = (body, callback) => {
     );
 };
 
+const updateResultOrders = (params) => {
+    return axiosInstance.post(API_URL + `momo/update-result${params}`);
+};
+
 const postService = {
     getPostPagination,
     getDetailPost,
@@ -73,6 +77,7 @@ const postService = {
     delPost,
     updatePost,
     ordersByMomo,
+    updateResultOrders,
 };
 
 export default postService;

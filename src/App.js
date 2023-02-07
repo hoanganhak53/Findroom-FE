@@ -27,6 +27,7 @@ import Post from './views/admin/Post';
 import Users from './views/admin/Users';
 import Reports from './views/admin/Reports';
 import Receipts from './views/admin/Receipts';
+import { Orders } from './views/profile/Orders';
 
 const App = () => {
     return (
@@ -57,6 +58,7 @@ const App = () => {
                                 path="favorite/:page"
                                 element={<FavPost />}
                             />
+                            <Route path="orders/:page" element={<Orders />} />
                         </Route>
                         <Route path="edit-profile" element={<EditProfile />} />
                         <Route path="create-post" element={<CreatePost />} />
