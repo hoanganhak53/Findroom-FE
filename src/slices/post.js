@@ -209,6 +209,24 @@ export const resultOrdersFromMomo = createAsyncThunk(
     }
 );
 
+export const allOrdersFromUser = createAsyncThunk(
+    'orders/all',
+    async (thunkAPI) => {
+        try {
+            return await postService.allUserOrders();
+        } catch (error) {
+            const message =
+                (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                error.message ||
+                error.toString();
+            thunkAPI.dispatch(setMessage(message));
+            return thunkAPI.rejectWithValue();
+        }
+    }
+);
+
 const initialState = {
     isLoading: false,
 };
