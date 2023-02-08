@@ -21,7 +21,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import MenuListComposition, { MenuListCompositionUsers } from './Menu';
+import MenuListComposition, { MenuListCompositionReport, MenuListCompositionUsers } from './Menu';
 import Status, { StatusUsers } from './Status';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
@@ -488,6 +488,174 @@ export function EnhancedTableUsers({title, headCells, rows=[], setPage, page, se
                       </TableCell>
                       <TableCell align="right">
                         <MenuListCompositionUsers item={row} setRefresh={setRefresh} refresh={refresh}/>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: (dense ? 33 : 53) * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={total}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+      <FormControlLabel
+        control={<Switch checked={dense} onChange={handleChangeDense} />}
+        label="Dense padding"
+      />
+    </Box>
+  );
+}
+
+export function EnhancedTableReport({title, headCells, rows=[], setPage, page, setRowsPerPage, rowsPerPage, total, setRefresh, refresh}) {
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
+  const [selected, setSelected] = React.useState([]);
+  // const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(limit);
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelected = rows.map((n) => n.name);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, name) => {
+    //check click menu
+    if((event.target.classList.contains('css-1e6y48t-MuiButtonBase-root-MuiButton-root'))
+    ||
+    (event.target.classList.contains('MuiSvgIcon-fontSizeMedium') 
+    &&  
+    event.target.classList.contains('css-i4bv87-MuiSvgIcon-root'))
+    ||
+    (event.target.tagName === 'path')
+    )
+    
+    return false
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
+
+  const isSelected = (name) => selected.indexOf(name) !== -1;
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
+        <EnhancedTableToolbar numSelected={selected.length} title={title}/>
+        <TableContainer>
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby="tableTitle"
+            size={dense ? 'small' : 'medium'}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+              headCells={headCells}
+            />
+            <TableBody>
+              {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.name);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      // onClick={(event) => handleClick(event, row.name)}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.name}
+                      selected={isItemSelected}
+                    >
+                      {/* <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            'aria-labelledby': labelId,
+                          }}
+                        />
+                      </TableCell> */}
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        // padding="none"
+                      >
+                        <Stack direction="row" spacing={1} style={{display:'flex'}}>
+                          <Avatar alt="avatar" src={row.user_info.avatar_url} />
+                          <b>{row.user_info.username}</b>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left">{row.room_response?.room_name}</TableCell>
+                      <TableCell align="left">{row.reason}</TableCell>
+                      <TableCell align="left">{moment.monthsShort()[+moment(row.created_at).format('MM') - 1] + ' ' + moment(row.created_at).format('DD, YYYY')}</TableCell>
+                      <TableCell align="right">
+                        <MenuListCompositionReport item={row} setRefresh={setRefresh} refresh={refresh}/>
                       </TableCell>
                     </TableRow>
                   );

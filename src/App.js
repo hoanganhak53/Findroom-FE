@@ -80,8 +80,8 @@ const App = () => {
                     >
                         <Route path="posts" element={<Post />} />
                         <Route path="users" element={<Users />} />
-                        <Route path="receipts" element={<Reports />} />
-                        <Route path="reports" element={<Receipts />} />
+                        <Route path="receipts" element={<Receipts />} />
+                        <Route path="reports" element={<Reports />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<NotFound />} />
