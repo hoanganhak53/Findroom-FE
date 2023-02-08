@@ -48,6 +48,16 @@ const SensorRoom = (id) => {
     return axiosInstance.post(API_URL + 'admin/room/sensor/' + id);
 };
 
+const getReportAdmin = (page, limit, offset) => {
+    return axiosInstance.post(API_URL + 'admin/report-room/pageable', {
+        params: {
+            page,
+            page_size: limit,
+            offset
+        }
+    });
+};
+
 const adminService = {
     getUsersAdmin,
     UnlockUser,
@@ -55,7 +65,8 @@ const adminService = {
     DeleteUser,
     getReportRoom,
     getPendingRoom,
-    SensorRoom
+    SensorRoom,
+    getReportAdmin
 };
 
 export default adminService;
