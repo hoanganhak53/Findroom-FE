@@ -6,7 +6,6 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import EnhancedTable from './Table'
-import MenuListComposition from './Menu';
 import adminService from '../../services/admin.service';
 
 function TabPanel(props) {
@@ -56,7 +55,7 @@ const headCells = [
     label: 'Tiêu đề',
   },
   {
-    id: 'created_at',
+    id: 'created_date',
     numeric: false,
     disablePadding: false,
     label: 'Ngày tạo',
@@ -88,46 +87,57 @@ const headCells = [
 
 const Post = () => {
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  const [pageReport, setPageReport] =  React.useState(0)
-  const [limitReport, setLimitReport] =  React.useState(10)
-  const [totalReport, setTotalReport] =  React.useState(0)
-  const [report, setReport] = React.useState([])
 
   const [pagePending, setPagePending] =  React.useState(0)
   const [limitPending, setLimitPending] =  React.useState(10)
   const [totalPending, setTotalPending] =  React.useState(0)
   const [pending, setPending] = React.useState([])
+
+  const [pagePagination, setPagePagination] =  React.useState(0)
+  const [search, setSearch] =  React.useState(false)
+  const [keyword, setKeyword] =  React.useState('')
+  const [paginationLoading, setPaginationLoading] =  React.useState(false)
+  const [limitPagination, setLimitPagination] =  React.useState(10)
+  const [postPagination, setPostPagination] = React.useState([]);
+  const [totalPagination, setTotalPagination] =  React.useState(0)
   
   React.useEffect(()=>{
     const callApi = async () => {
       try {
+        setPaginationLoading(true)
         const res = await adminService.getPendingRoom(pagePending, limitPending)
-        setPending(res.data.result)
+        setPending(res.data.result.map(item => {
+          item.status = 'pending'
+          return item
+        }))
         setTotalPending(res.data.total)
+        setPaginationLoading(false)
       } catch (error) {
         console.log("error", error)
+        setPaginationLoading(false)
       }
     }
     callApi()
   }, [pagePending, limitPending])
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     const callApi = async () => {
       try {
-        const res = await adminService.getReportRoom(pageReport, limitReport)
-        setReport(res.data.result)
-        setTotalReport(res.data.total)
+        setPaginationLoading(true)
+        const res = await adminService.getAllRoomAdmin(pagePagination, limitPagination, keyword)
+        setPostPagination(res.data.result)
+        setTotalPagination(res.data.total)
+        setPaginationLoading(false)
       } catch (error) {
         console.log("error", error)
+        setPaginationLoading(false)
       }
     }
     callApi()
-  }, [pageReport, limitReport])
+}, [pagePagination, limitPagination, search]);
 
   return (
     <div className='admin__post'>
@@ -142,6 +152,23 @@ const Post = () => {
         <EnhancedTable 
           title={'Tất cả bài đăng'} 
           headCells={headCells}
+          rows={postPagination} 
+          setRowsPerPage={setLimitPagination} 
+          rowsPerPage={limitPagination} 
+          setPage={setPagePagination} 
+          page={pagePagination}
+          total={totalPagination}
+          loading={paginationLoading}
+          keyword={keyword}
+          setKeyword={setKeyword}
+          setSearch={setSearch}
+          search={search}
+        />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <EnhancedTable 
+          title={'Bài đăng chờ duyệt'} 
+          headCells={headCells}
           rows={pending} 
           setRowsPerPage={setLimitPending} 
           rowsPerPage={limitPending} 
@@ -149,9 +176,6 @@ const Post = () => {
           page={pagePending}
           total={totalPending}
         />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <MenuListComposition/>
       </TabPanel>
     </div>
   )

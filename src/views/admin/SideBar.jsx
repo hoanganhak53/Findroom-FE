@@ -5,15 +5,20 @@ import PeopleIcon from '@mui/icons-material/People';
 import PaidIcon from '@mui/icons-material/Paid';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import { useNavigate, useLocation  } from 'react-router-dom';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 const SideBar = () => {
     const navigate = useNavigate()
 
     const handleActive = (e)=>{
+        const name = e.currentTarget.getAttribute('name')
+        if(name === 'return') {
+            navigate('/')
+            return
+        }
         const itemActive = document.querySelector('.sidebar__item.active')
         itemActive?.classList.remove('active')
         e.currentTarget.classList.add('active')
-        const name = e.currentTarget.getAttribute('name')
         navigate('/admin/' + name)
     }
 
@@ -43,6 +48,10 @@ const SideBar = () => {
                     <li className={name !== 'reports' ? "sidebar__item" : "sidebar__item active"} onClick={handleActive} name='reports'>
                         <CircleNotificationsIcon/>
                         <span>Báo cáo</span>
+                    </li>
+                    <li className={"sidebar__item" } onClick={handleActive} name='return'>
+                        <ArrowCircleLeftIcon/>
+                        <span>Trở về</span>
                     </li>
                 </ul>
             </div>

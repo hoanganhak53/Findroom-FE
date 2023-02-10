@@ -11,13 +11,13 @@ const headCells = [
       label: 'Tài khoản',
     },
     {
-      id: 'number_post',
+      id: 'number_room',
       numeric: true,
       disablePadding: false,
       label: 'Số bài đăng',
     },
     {
-      id: 'number_report',
+      id: 'number_reported',
       numeric: true,
       disablePadding: false,
       label: 'Số lần bị báo cáo',
@@ -47,24 +47,31 @@ const Users = () => {
   const [total, setTotal] =  React.useState(0)
   const [users, setUsers] = React.useState([])
   const [refresh, setRefresh] = React.useState(false)
+  const [search, setSearch] =  React.useState(false)
+  const [loading, setLoading] =  React.useState(false)
+  const [keyword, setKeyword] =  React.useState('')
     React.useEffect(()=>{
       const callApi = async () => {
         try {
-          const res = await AdminService.getUsersAdmin(page, limit)
+          setLoading(true)
+          const res = await AdminService.getUsersAdmin(page, limit, keyword)
           setUsers(res.data.result)
           setTotal(res.data.total)
+          setLoading(false)
         } catch (error) {
           console.log("error", error)
+          setLoading(false)
         }
       }
       callApi()
-    }, [page, limit, refresh])
+    }, [page, limit, refresh, search])
     return (
         <div className='admin__users'>
             <Header title={'Tài khoản khách hàng'} />
             <EnhancedTableUsers title={'Tất cả tài khoản'} 
               headCells={headCells} 
               rows={users} 
+              setRows={setUsers}
               setRowsPerPage={setLimit} 
               rowsPerPage={limit} 
               setPage={setPage} 
@@ -72,6 +79,12 @@ const Users = () => {
               total={total}
               setRefresh={setRefresh}
               refresh={refresh}
+              search={search}
+              setSearch={setSearch}
+              keyword={keyword}
+              setKeyword={setKeyword}
+              loading={loading}
+              setLoading={setLoading}
             />
         </div>
     )
