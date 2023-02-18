@@ -207,6 +207,7 @@ export const PostImg = ({ room, isShow, setShowOrder }) => {
             dispatch(
                 saveByMomo({
                     body: {
+                        is_paid: room.is_paid,
                         total: room.deposit,
                         user_id: currentUser.id,
                         room,
