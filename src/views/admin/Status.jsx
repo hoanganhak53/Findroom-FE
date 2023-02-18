@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Status = ({status}) => {
-    if(!status){
+    if(status === 'active'){
         return (
             <div className='admin__status'>
                 <div className="content">
