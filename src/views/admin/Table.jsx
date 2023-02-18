@@ -129,7 +129,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected, title, loading, keyword, setKeyword, setSearch, search } = props;
+  const { numSelected, title, loading, keyword, setKeyword, setSearch, search, type } = props;
 
   return (
     <Toolbar
@@ -150,9 +150,13 @@ function EnhancedTableToolbar(props) {
       >
         {loading ? <>{title}<CircularProgress size={20} style={{marginLeft: '8px'}}/></> :  title}
       </Typography>
-      <div className=''>
-          <input type="text" onChange={(ev) => {setKeyword(ev.target.value)}} />
-      </div>
+      {!(type === 'report' || type == 'receipt') ? 
+        <div className=''>
+            <input type="text" onChange={(ev) => {setKeyword(ev.target.value)}} />
+        </div>
+        :
+        <></>
+      }
       <Tooltip title="Filter list" onClick={()=>setSearch(!search)}>
         <IconButton>
           <FilterListIcon />
@@ -495,7 +499,7 @@ export function EnhancedTableReport({title, headCells, rows=[], setPage, page, s
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} title={title}/>
+        <EnhancedTableToolbar numSelected={selected.length} title={title} type={'report'}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -628,7 +632,7 @@ export function EnhancedTableReceipts({title, headCells, rows=[], setPage, page,
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} title={title} loading={loading}/>
+        <EnhancedTableToolbar numSelected={selected.length} title={title} loading={loading} type={"receipt"}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

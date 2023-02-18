@@ -5,13 +5,13 @@ import AdminService from '../../services/admin.service';
 
 const headCells = [
     {
-        id: 'user',
+        id: 'username',
         numeric: false,
         disablePadding: false,
         label: 'Người báo cáo',
     },
     {
-        id: 'room',
+        id: 'room_name',
         numeric: false,
         disablePadding: false,
         label: 'Bài viết bị báo cáo',
@@ -44,7 +44,11 @@ const Reports = () => {
         const callApi = async () => {
             try {
                 const res = await AdminService.getReportAdmin(page, limit)
-                setReports(res.data.result)
+                setReports(res.data.result.map(item => {
+                    item.username = item.user_info.username
+                    item.room_name = item.room_response?.room_name
+                    return item
+                }))
                 setTotal(res.data.total)
             } catch (error) {
                 console.log("error", error)

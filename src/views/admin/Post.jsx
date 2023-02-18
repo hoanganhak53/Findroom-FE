@@ -128,7 +128,10 @@ const Post = () => {
       try {
         setPaginationLoading(true)
         const res = await adminService.getAllRoomAdmin(pagePagination, limitPagination, keyword)
-        setPostPagination(res.data.result)
+        setPostPagination(res.data.result.map(item => {
+          item.status = 'active'
+          return item
+        }))
         setTotalPagination(res.data.total)
         setPaginationLoading(false)
       } catch (error) {

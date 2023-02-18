@@ -21,6 +21,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import adminService from '../../services/admin.service';
+import PostService from '../../services/post.service';
 import MyLoading from './Modal';
 import { useNavigate } from 'react-router-dom';
 import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
@@ -359,8 +360,6 @@ export function MenuListCompositionUsers({ item, setItems }) {
 
 export function MenuListCompositionReport({ item, setRefresh, refresh }) {
   const [open, setOpen] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState(item);
-  const [openPopupInfo, setOpenPopupInfo] = React.useState(false);
   const [openUnlock, setOpenUnlock] = React.useState(false);
   const [promise, setPromise] = React.useState(false);
   const [title, setTitle] = React.useState('');
@@ -393,12 +392,12 @@ export function MenuListCompositionReport({ item, setRefresh, refresh }) {
     setPromise(adminService.LockUser(id))
   }
 
-  const handleDeleteUser = () => {
+  const handleDeleteRoom = () => {
     setOpen(false)
     setOpenUnlock(true)
-    setTitle('Xóa tài khoản')
+    setTitle('Xóa bài bị báo cáo')
     setRefresh(!refresh)
-    setPromise(adminService.DeleteUser(currentUser.id))
+    setPromise(PostService.delPost(item.room_id))
   }
 
   function handleListKeyDown(event) {
@@ -460,7 +459,7 @@ export function MenuListCompositionReport({ item, setRefresh, refresh }) {
                     <MenuItem onClick={handleInforRoom}>
                       <VisibilityIcon style={{ color: '#3498DB', marginRight: '8px' }} /> Xem bài bị tố cáo
                     </MenuItem>
-                    <MenuItem onClick={handleDeleteUser}>
+                    <MenuItem onClick={handleDeleteRoom}>
                       <DeleteIcon style={{ color: '#E74C3C', marginRight: '8px' }} /> Xóa bài bị tố cáo
                     </MenuItem>
                     <MenuItem>
@@ -469,9 +468,9 @@ export function MenuListCompositionReport({ item, setRefresh, refresh }) {
                     <MenuItem onClick={() => { handleLockUser(item.user_id) }}>
                       <LockOutlinedIcon style={{ color: '#F1C40F', marginRight: '8px' }} /> Khoá người dùng
                     </MenuItem>
-                    <MenuItem onClick={() => { handleLockUser(item.room_response.user_id) }}>
+                    {/* <MenuItem onClick={() => { handleLockUser(item.room_response.user_id) }}>
                       <RemoveCircleIcon style={{ color: '#E74C3C', marginRight: '8px' }} /> Chặn tài khoản
-                    </MenuItem>
+                    </MenuItem> */}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
