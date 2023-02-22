@@ -89,7 +89,7 @@ export const NavBar = () => {
             <div className="navbar-nav ml-auto">
                 <Search placeholder="Tìm kiếm phòng trên findroom" />
                 <li className="nav-item">
-                    {currentUser?.email === 'admin@gmail.com' ? (
+                    {currentUser?.email !== 'admin@gmail.com' ? (
                         <Link
                             onClick={openChat}
                             className="nav-link d-flex align-items-center"
