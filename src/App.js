@@ -34,7 +34,7 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route path="" element={<Navigate to="home" replace />} />
+                    <Route path="" element={<Home />} />
                     <Route path="home" element={<Home />} />
                     <Route path="room/:roomId" element={<PostDetail />} />
                     <Route path="search/:page" element={<SearchPost />} />
