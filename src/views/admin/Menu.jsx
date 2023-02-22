@@ -127,7 +127,7 @@ export default function MenuListComposition({ item }) {
                         :
                         <></>
                     }
-                    {
+                    {/* {
                       item.status === 'active' ?
                         <MenuItem onClick={handleClose}>
                           <CancelIcon style={{ color: '#F1C40F', marginRight: '8px' }} /> Từ chối bài viết
@@ -137,7 +137,7 @@ export default function MenuListComposition({ item }) {
                     }
                     <MenuItem onClick={handleClose}>
                       <RemoveCircleIcon style={{ color: '#E74C3C', marginRight: '8px' }} /> Chặn bài viêt
-                    </MenuItem>
+                    </MenuItem> */}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
@@ -187,14 +187,14 @@ export function MenuListCompositionUsers({ item, setItems }) {
   }
 
   const handleUnlockUser = () => {
-    // setItems(prev => {
-    //   return prev.map(i => {
-    //     if(i.id === item.id){
-    //       i.status = 'active'
-    //     }
-    //     return i
-    //   })
-    // })
+    setItems(prev => {
+      return prev.map(i => {
+        if(i.id === item.id){
+          i.status = 'active'
+        }
+        return i
+      })
+    })
     setOpen(false)
     setOpenUnlock(true)
     setTitle('Mở khóa tài khoản')
@@ -202,14 +202,14 @@ export function MenuListCompositionUsers({ item, setItems }) {
   }
 
   const handleLockUser = () => {
-    // setItems(prev => {
-    //   return prev.map(i => {
-    //     if(i.id === item.id){
-    //       i.status = 'inactive'
-    //     }
-    //     return i
-    //   })
-    // })
+    setItems(prev => {
+      return prev.map(i => {
+        if(i.id === item.id){
+          i.status = 'inactive'
+        }
+        return i
+      })
+    })
     setOpen(false)
     setOpenUnlock(true)
     setTitle('Chặn tài khoản')
@@ -462,9 +462,9 @@ export function MenuListCompositionReport({ item, setRefresh, refresh }) {
                     <MenuItem onClick={handleDeleteRoom}>
                       <DeleteIcon style={{ color: '#E74C3C', marginRight: '8px' }} /> Xóa bài bị tố cáo
                     </MenuItem>
-                    <MenuItem>
+                    {/* <MenuItem>
                       <BlockOutlinedIcon style={{ color: '#2ECC71', marginRight: '8px' }} /> Hủy báo cáo
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem onClick={() => { handleLockUser(item.user_id) }}>
                       <LockOutlinedIcon style={{ color: '#F1C40F', marginRight: '8px' }} /> Khoá người dùng
                     </MenuItem>
