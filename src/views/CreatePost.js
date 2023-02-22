@@ -199,6 +199,8 @@ const CreatePost = () => {
                 ggMapApis[0].address_components
             );
         }
+        if (!body.room_gender) body.room_gender = 'any';
+        if (!body.room_type) body.room_type = ROOM_TYPE.SHARED;
 
         try {
             await createPostSchema.validate({
