@@ -7,9 +7,9 @@ export const registerSchema = Yup.object().shape({
     username: Yup.string()
         .test(
             'len',
-            'Tên đăng nhập phải từ 4 đến 20 ký tự',
+            'Tên đăng nhập phải từ 8 đến 20 ký tự',
             (val) =>
-                val && val.toString().length >= 4 && val.toString().length <= 20
+                val && val.toString().length >= 8 && val.toString().length <= 20
         )
         .required('Đây là trường bắt buộc!'),
     email: Yup.string()
@@ -29,9 +29,9 @@ export const loginSchema = Yup.object().shape({
     username: Yup.string()
         .test(
             'len',
-            'Tên đăng nhập phải từ 4 đến 20 ký tự',
+            'Tên đăng nhập phải từ 8 đến 20 ký tự',
             (val) =>
-                val && val.toString().length >= 4 && val.toString().length <= 20
+                val && val.toString().length >= 8 && val.toString().length <= 20
         )
         .required('Đây là trường bắt buộc!'),
     password: Yup.string()
@@ -48,9 +48,9 @@ export const editProfileSchema = Yup.object().shape({
     username: Yup.string()
         .test(
             'len',
-            'Tên đăng nhập phải từ 4 đến 20 ký tự',
+            'Tên đăng nhập phải từ 8 đến 20 ký tự',
             (val) =>
-                val && val.toString().length >= 4 && val.toString().length <= 20
+                val && val.toString().length >= 8 && val.toString().length <= 20
         )
         .required('Đây là trường bắt buộc!'),
 

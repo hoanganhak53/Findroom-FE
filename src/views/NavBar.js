@@ -25,7 +25,8 @@ export const NavBar = () => {
 
     const logOut = useCallback(() => {
         dispatch(logout());
-    }, [dispatch]);
+        navigate('/');
+    }, [dispatch, navigate]);
 
     useEffect(() => {
         if (currentUser) {
@@ -135,11 +136,13 @@ export const NavBar = () => {
                                 </span>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item href="/profile/1">
+                                <Dropdown.Item
+                                    onClick={() => navigate('/profile/1')}
+                                >
                                     <PersonIcon color="primary" /> Thông tin cá
                                     nhân
                                 </Dropdown.Item>
-                                <Dropdown.Item href="/login" onClick={logOut}>
+                                <Dropdown.Item onClick={logOut}>
                                     <Logout color="warning" /> Đăng xuất
                                 </Dropdown.Item>
                             </Dropdown.Menu>
