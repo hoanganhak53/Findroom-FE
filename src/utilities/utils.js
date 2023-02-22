@@ -70,7 +70,7 @@ export async function generateAddressCode(address_components) {
 export async function generateAddressPositionAPI(address) {
     try {
         const baseUrl = 'http://api.positionstack.com/v1/forward';
-        const key = 'fa2096be22692ec319a789c570098f9f';
+        const key = '87ede7235625d66f76fe86eb496e37f1';
         const respone = await axios.get(baseUrl, {
             params: {
                 access_key: key,
