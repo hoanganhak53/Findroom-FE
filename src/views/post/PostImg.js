@@ -199,7 +199,6 @@ export const PostImg = ({ room, isShow, setShowOrder }) => {
             })
         );
     };
-
     const depositByMomo = () => {
         if (isShow) {
             setShowOrder(true);
@@ -212,7 +211,7 @@ export const PostImg = ({ room, isShow, setShowOrder }) => {
                         user_id: currentUser.id,
                         room,
                     },
-                    callback: `http://localhost:3000/room/${room_id}`,
+                    callback: `${window.location.protocol}//${window.location.host}/%23/room/${room_id}`,
                 })
             )
                 .unwrap()
