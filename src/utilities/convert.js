@@ -31,3 +31,8 @@ export const convertTimeMessage = (time) => {
     }
     return moment(time * 1000).fromNow();
 };
+
+export const convertTimeToDate = (time) => {
+    if (!time) return '10/12/2022';
+    return moment(time).format('D/M/YYYY');
+};

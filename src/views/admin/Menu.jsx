@@ -27,6 +27,7 @@ import { useNavigate } from 'react-router-dom';
 import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { convertTimeToDate } from '../../utilities/convert';
 
 export default function MenuListComposition({ item }) {
   const [open, setOpen] = React.useState(false);
@@ -324,7 +325,7 @@ export function MenuListCompositionUsers({ item, setItems }) {
                   <span className="ml-1 mr-1 text-muted">
                     Ngày tham gia:
                   </span>
-                  <span>10/12/2022</span>
+                  <span>{convertTimeToDate(currentUser.created_at)}</span>
                 </div>
                 <div className="d-flex mb-3">
                   <MailOutlineIcon color="action" />

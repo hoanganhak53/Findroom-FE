@@ -5,6 +5,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { convertTimeToDate } from '../../utilities/convert';
 
 const Profile = () => {
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -47,7 +48,7 @@ const Profile = () => {
                         <span className="ml-1 mr-1 text-muted">
                             Ngày tham gia:
                         </span>
-                        <span>10/12/2022</span>
+                        <span>{convertTimeToDate(currentUser.created_at)}</span>
                     </div>
                     <div className="d-flex mb-3">
                         <MailOutlineIcon color="action" />
